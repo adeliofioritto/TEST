@@ -9,18 +9,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 
-let app = express();
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-app.set('port', process.env.PORT || 8080);
-
-//app.use(bodyParser.urlencoded({ extended: false }));
-//app.use(bodyParser.json());
+const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const port = 3000;
 
@@ -35,18 +26,11 @@ app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
 
 console.log("TEST STARTED");
 
-/*
-  SECRETS URLS/FUNCTIONS
- */
-  if (hasSecret) {
-    app.get('/secrets', function (request, response) {
-      fs.readFile(secretFile, function (err, contents) {
-        if (err) {
-          console.error('secret not found');
-          response.render('error', {'msg': JSON.stringify(err, null, 4)});
-        } else {
-          response.render('secrets', {'secret': contents});
-        }
-      });
-    });
-  }
+fs.readFile(secretFile, function (err, contents) {
+    if (err) {
+      console.error('secret not found');
+      response.render('error', {'msg': JSON.stringify(err, null, 4)});
+    } else {
+      response.render('secrets', {'secret': contents});
+    }
+  });
