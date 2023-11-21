@@ -16,7 +16,12 @@ app.use(bodyParser.json());
 
 const port = 3000;
 
-//console.log( process.env);
+let CONFIG_FILE = process.env.CONFIG_FILE || '/var/config/config.json';
+if (!path.isAbsolute(CONFIG_FILE)) { CONFIG_FILE = path.resolve(__dirname, CONFIG_FILE); }
+let hasCONFIG_FILE = fs.existsSync(CONFIG_FILE);
+app.locals.hasCONFIG_FILE = hasCONFIG_FILE;
+
+
 let EMAIL_PASSWORD = process.env.EMAIL_PASSWORD || '/var/secret/EMAIL_PASSWORD';
 if (!path.isAbsolute(EMAIL_PASSWORD)) { EMAIL_PASSWORD = path.resolve(__dirname, EMAIL_PASSWORD); }
 let hasEMAIL_PASSWORD = fs.existsSync(EMAIL_PASSWORD);
@@ -51,6 +56,19 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
     });
 }else{
     console.log("Please check your secret configuration. Variable or bind not setted.");
+}
+
+if(hasCONFIG_FILE){
+    fs.readFile(CONFIG_FILE, "utf8", function (err, contents) {
+        if (err) {
+            console.error('secret not found');
+            console.error('error', {'msg': JSON.stringify(err, null, 4)});
+        } else {
+            console.log(contents);
+        }
+    });
+}else{
+    console.log("Please check your config map. Variable or bind not setted.");
 }
 
 
