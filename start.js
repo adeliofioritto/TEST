@@ -9,9 +9,18 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 
-const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+let app = express();
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.set('port', process.env.PORT || 8080);
+
+//app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.json());
 
 const port = 3000;
 
