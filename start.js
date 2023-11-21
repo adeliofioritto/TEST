@@ -29,8 +29,8 @@ console.log("TEST STARTED");
 fs.readFile(secretFile, function (err, contents) {
     if (err) {
       console.error('secret not found');
-      response.render('error', {'msg': JSON.stringify(err, null, 4)});
+      console.log(response.render('error', {'msg': JSON.stringify(err, null, 4)}));
     } else {
-      response.render('secrets', {'secret': contents});
+      console.log(response.render('secrets', {'secret': contents}));
     }
   });
