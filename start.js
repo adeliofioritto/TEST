@@ -37,7 +37,6 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
-            //console.log('secrets', {'secret': contents});
             console.log(contents);
         }
     });
@@ -47,7 +46,6 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
-            //console.log('secrets', {'secret': contents});
             console.log(contents);
         }
     });
