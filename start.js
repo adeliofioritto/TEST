@@ -26,11 +26,17 @@ app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
 
 console.log("TEST STARTED");
 
-fs.readFile(secretFile, function (err, contents) {
-    if (err) {
-      console.error('secret not found');
-      console.log(response.render('error', {'msg': JSON.stringify(err, null, 4)}));
-    } else {
-      console.log(response.render('secrets', {'secret': contents}));
-    }
-  });
+/*
+  SECRETS URLS/FUNCTIONS
+ */
+    app.get('/secrets', function (request, response) {
+      fs.readFile(secretFile, function (err, contents) {
+        if (err) {
+          console.error('secret not found');
+          response.render('error', {'msg': JSON.stringify(err, null, 4)});
+        } else {
+          response.render('secrets', {'secret': contents});
+        }
+      });
+    });
+  
