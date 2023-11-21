@@ -8,6 +8,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const { readFileSync } = require('fs');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,7 +26,7 @@ app.locals.hasSecret = hasSecret;
 app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
 
 console.log("TEST STARTED");
-
+/*
 fs.readFile(secretFile, function (err, contents) {
     if (err) {
         console.error('secret not found');
@@ -34,12 +35,8 @@ fs.readFile(secretFile, function (err, contents) {
         console.log('secrets', {'secret': contents});
         console.log(JSON.parse(contents));
     }
-});
+});*/
+
+const data = readFileSync(secretFile);
+console.log(JSON.parse(data));
   
-fs.readFile(secretFile, "utf8", (error, data) => {
-    if (error) {
-      console.log(error);
-      return;
-    }
-    console.log(JSON.parse(data));
-  });
