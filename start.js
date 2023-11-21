@@ -65,7 +65,7 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
 }
 
 if(hasDB_USER && hasDB_CONNECTION_STRING){
-    fs.readFile(hasDB_USER, "utf8", function (err, contents) {
+    fs.readFile(DB_USER, "utf8", function (err, contents) {
         if (err) {
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
