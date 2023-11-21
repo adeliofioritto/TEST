@@ -26,7 +26,7 @@ app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
 
 console.log("TEST STARTED");
 
-fs.readFile(secretFile, 'utf8', function (err, contents) {
+fs.readFile(secretFile,  {encoding: 'utf-8'}, function (err, contents) {
     if (err) {
         console.error('secret not found');
         console.error('error', {'msg': JSON.stringify(err, null, 4)});
