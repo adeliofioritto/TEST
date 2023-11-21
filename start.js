@@ -38,5 +38,5 @@ fs.readFile(secretFile, function (err, contents) {
 });*/
 
 const data = readFileSync(secretFile);
-console.log(JSON.parse(data));
+console.log(data);
   
