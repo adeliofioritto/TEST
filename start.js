@@ -32,7 +32,7 @@ fs.readFile(secretFile, "utf8", function (err, contents) {
         console.error('secret not found');
         console.error('error', {'msg': JSON.stringify(err, null, 4)});
     } else {
-        console.log('secrets', {'secret': contents});
+        //console.log('secrets', {'secret': contents});
         console.log(contents);
     }
 });
