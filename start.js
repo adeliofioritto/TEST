@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 const port = 3000;
 
 //console.log( process.env);
-let secretFile = process.env.SECRET_FILE || '/var/secret';
+let secretFile = process.env.SECRET_FILE || '/var/secret/';
 if (!path.isAbsolute(secretFile)) { secretFile = path.resolve(__dirname, secretFile); }
 let hasSecret = fs.existsSync(secretFile);
 console.log("hasSecret:"+hasSecret);
