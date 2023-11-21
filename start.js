@@ -49,6 +49,7 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
             console.log(contents);
+            console.log("- Found Email Password");
         }
     });
     
@@ -58,6 +59,7 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
             console.log(contents);
+            console.log("- Found DB Password");
         }
     });
 }else{
@@ -71,6 +73,7 @@ if(hasDB_USER && hasDB_CONNECTION_STRING){
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
             console.log(contents);
+            console.log("- Found DB User");
         }
     });
     fs.readFile(DB_CONNECTION_STRING, "utf8", function (err, contents) {
@@ -79,6 +82,7 @@ if(hasDB_USER && hasDB_CONNECTION_STRING){
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
             console.log(contents);
+            console.log("- Found DB Connection String");
         }
     });
 }else{
