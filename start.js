@@ -14,8 +14,9 @@ app.use(bodyParser.json());
 
 const port = 3000;
 
-
+let secretFile = process.env.SECRET_FILE || '/var/secret/secret.txt';
 
 app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
 
 console.log("TEST STARTED");
+console.log("secretFile:"+secretFile);
