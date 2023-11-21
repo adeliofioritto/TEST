@@ -32,7 +32,7 @@ fs.readFile(secretFile, function (err, contents) {
         console.error('error', {'msg': JSON.stringify(err, null, 4)});
     } else {
         console.log('secrets', {'secret': contents});
-        console.log(JSON.stringify(contents));
+        console.log(JSON.parse(contents));
     }
 });
   
