@@ -64,7 +64,7 @@ if(hasCONFIG_FILE){
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
-            console.log(contents);
+            console.log(JSON.parse(contents));
         }
     });
 }else{
