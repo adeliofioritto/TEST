@@ -65,8 +65,6 @@ if(hasCONFIG_FILE){
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
             console.log(contents);
-            //let test = JSON.parse(contents);
-            //console.log(test);
         }
     });
 }else{
