@@ -16,10 +16,16 @@ app.use(bodyParser.json());
 
 const port = 3000;
 
-let CONFIG_FILE = process.env.CONFIG_FILE || '/var/config/config.json';
-if (!path.isAbsolute(CONFIG_FILE)) { CONFIG_FILE = path.resolve(__dirname, CONFIG_FILE); }
-let hasCONFIG_FILE = fs.existsSync(CONFIG_FILE);
-app.locals.hasCONFIG_FILE = hasCONFIG_FILE;
+let DB_USER = process.env.DB_USER || '/var/config/DB_USER';
+if (!path.isAbsolute(DB_USER)) { DB_USER = path.resolve(__dirname, DB_USER); }
+let hasDB_USER = fs.existsSync(DB_USER);
+app.locals.hasDB_USER = hasDB_USER;
+
+
+let DB_CONNECTION_STRING = process.env.DB_CONNECTION_STRING || '/var/config/DB_CONNECTION_STRING';
+if (!path.isAbsolute(DB_CONNECTION_STRING)) { DB_CONNECTION_STRING = path.resolve(__dirname, DB_CONNECTION_STRING); }
+let hasDB_CONNECTION_STRING = fs.existsSync(DB_CONNECTION_STRING);
+app.locals.hasDB_CONNECTION_STRING = hasDB_CONNECTION_STRING;
 
 
 let EMAIL_PASSWORD = process.env.EMAIL_PASSWORD || '/var/secret/EMAIL_PASSWORD';
@@ -58,8 +64,8 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
     console.log("Please check your secret configuration. Variable or bind not setted.");
 }
 
-if(hasCONFIG_FILE){
-    fs.readFile(CONFIG_FILE, "utf8", function (err, contents) {
+if(hasDB_USER && hasDB_CONNECTION_STRING){
+    fs.readFile(DB_USERE, "utf8", function (err, contents) {
         if (err) {
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
