@@ -17,11 +17,15 @@ app.use(bodyParser.json());
 const port = 3000;
 
 //console.log( process.env);
-let secretFile = process.env.SECRET_FILE || '/var/secret/data';
+let secretFile = process.env.SECRET_FILE || '/var/secret/secret.txt';
 if (!path.isAbsolute(secretFile)) { secretFile = path.resolve(__dirname, secretFile); }
 let hasSecret = fs.existsSync(secretFile);
-console.log("hasSecret:"+hasSecret);
 app.locals.hasSecret = hasSecret;
+
+let DB_PASSWORD = process.env.SECRET_FILE || '/var/secret/DB_PASSWORD';
+if (!path.isAbsolute(DB_PASSWORD)) { DB_PASSWORD = path.resolve(__dirname, DB_PASSWORD); }
+let hasDB_PASSWORD = fs.existsSync(DB_PASSWORD);
+app.locals.hasSecret = hasDB_PASSWORD;
 
 app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
 
@@ -37,5 +41,14 @@ fs.readFile(secretFile, "utf8", function (err, contents) {
     }
 });
 
+fs.readFile(DB_PASSWORD, "utf8", function (err, contents) {
+    if (err) {
+        console.error('secret not found');
+        console.error('error', {'msg': JSON.stringify(err, null, 4)});
+    } else {
+        //console.log('secrets', {'secret': contents});
+        console.log(contents);
+    }
+});
 
   
