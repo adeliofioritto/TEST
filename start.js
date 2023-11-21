@@ -17,38 +17,44 @@ app.use(bodyParser.json());
 const port = 3000;
 
 //console.log( process.env);
-let secretFile = process.env.SECRET_FILE || '/var/secret/secret.txt';
-if (!path.isAbsolute(secretFile)) { secretFile = path.resolve(__dirname, secretFile); }
-let hasSecret = fs.existsSync(secretFile);
-app.locals.hasSecret = hasSecret;
+let EMAIL_PASSWORD = process.env.EMAIL_PASSWORD || '/var/secret/EMAIL_PASSWORD';
+if (!path.isAbsolute(EMAIL_PASSWORD)) { EMAIL_PASSWORD = path.resolve(__dirname, EMAIL_PASSWORD); }
+let hasEMAIL_PASSWORD = fs.existsSync(EMAIL_PASSWORD);
+app.locals.hasEMAIL_PASSWORD = hasEMAIL_PASSWORD;
 
-let DB_PASSWORD = process.env.SECRET_FILE || '/var/secret/DB_PASSWORD';
+let DB_PASSWORD = process.env.DB_PASSWORD || '/var/secret/DB_PASSWORD';
 if (!path.isAbsolute(DB_PASSWORD)) { DB_PASSWORD = path.resolve(__dirname, DB_PASSWORD); }
 let hasDB_PASSWORD = fs.existsSync(DB_PASSWORD);
-app.locals.hasSecret = hasDB_PASSWORD;
+app.locals.hasDB_PASSWORD = hasDB_PASSWORD;
 
 app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
 
 console.log("TEST STARTED");
 
-fs.readFile(secretFile, "utf8", function (err, contents) {
-    if (err) {
-        console.error('secret not found');
-        console.error('error', {'msg': JSON.stringify(err, null, 4)});
-    } else {
-        //console.log('secrets', {'secret': contents});
-        console.log(contents);
-    }
-});
+if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
+    fs.readFile(EMAIL_PASSWORD, "utf8", function (err, contents) {
+        if (err) {
+            console.error('secret not found');
+            console.error('error', {'msg': JSON.stringify(err, null, 4)});
+        } else {
+            //console.log('secrets', {'secret': contents});
+            console.log(contents);
+        }
+    });
+    
+    fs.readFile(DB_PASSWORD, "utf8", function (err, contents) {
+        if (err) {
+            console.error('secret not found');
+            console.error('error', {'msg': JSON.stringify(err, null, 4)});
+        } else {
+            //console.log('secrets', {'secret': contents});
+            console.log(contents);
+        }
+    });
+}else{
+    console.log("Please check your secret configuration. Variable or bind not setted.");
+}
 
-fs.readFile(DB_PASSWORD, "utf8", function (err, contents) {
-    if (err) {
-        console.error('secret not found');
-        console.error('error', {'msg': JSON.stringify(err, null, 4)});
-    } else {
-        //console.log('secrets', {'secret': contents});
-        console.log(contents);
-    }
-});
+
 
   
