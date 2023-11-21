@@ -19,6 +19,7 @@ console.log( process.env);
 let secretFile = process.env.SECRET_FILE || '/var/secret/secret.txt';
 if (!path.isAbsolute(secretFile)) { secretFile = path.resolve(__dirname, secretFile); }
 let hasSecret = fs.existsSync(secretFile);
+console.log("hasSecret:"+hasSecret);
 app.locals.hasSecret = hasSecret;
 
 app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
