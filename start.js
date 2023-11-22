@@ -247,8 +247,12 @@ app.get('/ward', (req, res) => {
   
   console.log("Richiesta ricevuta per report reparto:");
   console.log(req.query);
+  const client_cred_access_token = 'fakeToken';
+
   //generaReportTerapia(req.params.wsd1+'/'+req.params.wsd2, res);
-  res.sendFile(__dirname + "/ward.html?test=ade");
+  //res.sendFile(__dirname + "/ward.html");
+  res.render(path.join(__dirname, '', 'ward.html'), {token: client_cred_access_token});
+
 
 });
 
