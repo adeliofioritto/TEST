@@ -141,7 +141,7 @@ var stylePAZ = workbookPAZ.createStyle({
 
 
 async function generaReportTerapia(reparto,res) {
-  console.log("nosologico: "+reparto);
+  //console.log("nosologico: "+reparto);
   let ts = Date.now();
   
   let date_ob = new Date(ts);
@@ -209,7 +209,6 @@ async function generaReportTerapia(reparto,res) {
         }
   
         //workbook.write('statistiche.xlsx', res);
-        console.log(101);
         workbookPAZ.write(reparto+" "+ date + "-" + month + "-" + year+" ore " + hour+"-" + minutes+".xlsx", res);
 /*
         workbook.writeToBuffer().then(function(buffer) {
@@ -257,7 +256,7 @@ app.get('/ward', (req, res) => {
 
 app.get('/encounter', (req, res) => {
   
-  console.log("Richiesta ricevuta per report reparto:");
+  console.log("Richiesta ricevuta per report paziente:");
   console.log(req.query);
   generaReportTerapia(req.query.encounterCode, res);
   //res.send(req.query.encounterCode);
