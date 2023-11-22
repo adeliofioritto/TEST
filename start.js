@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const { readFileSync } = require('fs');
+require('log-timestamp');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,22 +22,22 @@ if (!path.isAbsolute(DB_USER)) { DB_USER = path.resolve(__dirname, DB_USER); }
 let hasDB_USER = fs.existsSync(DB_USER);
 app.locals.hasDB_USER = hasDB_USER;
 
+let DB_PASSWORD = process.env.DB_PASSWORD || '/var/secret/DB_PASSWORD';
+if (!path.isAbsolute(DB_PASSWORD)) { DB_PASSWORD = path.resolve(__dirname, DB_PASSWORD); }
+let hasDB_PASSWORD = fs.existsSync(DB_PASSWORD);
+app.locals.hasDB_PASSWORD = hasDB_PASSWORD;
 
 let DB_CONNECTION_STRING = process.env.DB_CONNECTION_STRING || '/var/config/DB_CONNECTION_STRING';
 if (!path.isAbsolute(DB_CONNECTION_STRING)) { DB_CONNECTION_STRING = path.resolve(__dirname, DB_CONNECTION_STRING); }
 let hasDB_CONNECTION_STRING = fs.existsSync(DB_CONNECTION_STRING);
 app.locals.hasDB_CONNECTION_STRING = hasDB_CONNECTION_STRING;
 
-
 let EMAIL_PASSWORD = process.env.EMAIL_PASSWORD || '/var/secret/EMAIL_PASSWORD';
 if (!path.isAbsolute(EMAIL_PASSWORD)) { EMAIL_PASSWORD = path.resolve(__dirname, EMAIL_PASSWORD); }
 let hasEMAIL_PASSWORD = fs.existsSync(EMAIL_PASSWORD);
 app.locals.hasEMAIL_PASSWORD = hasEMAIL_PASSWORD;
 
-let DB_PASSWORD = process.env.DB_PASSWORD || '/var/secret/DB_PASSWORD';
-if (!path.isAbsolute(DB_PASSWORD)) { DB_PASSWORD = path.resolve(__dirname, DB_PASSWORD); }
-let hasDB_PASSWORD = fs.existsSync(DB_PASSWORD);
-app.locals.hasDB_PASSWORD = hasDB_PASSWORD;
+
 
 app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
 
