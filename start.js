@@ -108,6 +108,8 @@ console.log(DB_PASSWORD);
 console.log(DB_USER);
 console.log(DB_CONNECTION_STRING);
 
+
+
 function healthStatus() {
     if (healthy) {
       return "Service is UP";
@@ -116,8 +118,158 @@ function healthStatus() {
     }
   }
 
+
+
+// Create a new instance of a Workbook class
+var workbook = new excel.Workbook();
+var workbookPAZ = new excel.Workbook();
+
+// Add Worksheets to the workbook
+var worksheetPAZ = workbookPAZ.addWorksheet('FARMACI_PAZIENTE');
+
+// Create a reusable style
+var style = workbook.createStyle({
+  font: {
+    color: '#000000',
+    size: 10
+  }});
+
+var stylePAZ = workbookPAZ.createStyle({
+  font: {
+    color: '#000000',
+    size: 10
+  }});
+  
+
+
+async function generaReportTerapia(reparto,res) {
+  console.log("nosologico: "+reparto);
+  let ts = Date.now();
+  
+  let date_ob = new Date(ts);
+  let date = date_ob.getDate();
+  let month = date_ob.getMonth() + 1;
+  let year = date_ob.getFullYear();  
+  let hour = date_ob.getHours();
+  let minutes = date_ob.getMinutes();
+  
+  let ts1 = Date.now();
+  
+  let date_ob1 = new Date(ts1);
+  date_ob1.setDate(date_ob1.getDate()-180);
+  
+  let date1 = date_ob1.getDate();
+  let month1 = date_ob1.getMonth() + 1;
+  let year1 = date_ob1.getFullYear();  
+  let hour1 = date_ob1.getHours();
+  let minutes1 = date_ob1.getMinutes();
+  
+  let connection;
+    try {
+      connection = await oracledb.getConnection({ user: DB_USER, password: DB_PASSWORD, connectionString: DB_CONNECTION_STRING });
+
+      //Primo Foglio
+      result = await connection.execute(
+          `SELECT to_char(extension) extension,
+                  to_char(item_code) item_code,
+                  to_char(item_desc) item_desc,
+                  CASE WHEN (NVL(qty_uom,'')) is NULL then ' ' ELSE TO_CHAR(NVL(qty_uom,'')) END qty_uom,
+                  CASE WHEN (NVL(qty,'')) is NULL then ' ' ELSE TO_CHAR(NVL(qty,'')) END qty,
+                  TO_CHAR(administered_start, 'YYYY-MM-DD HH24:MM') administered_start,
+                  to_char(route_desc) route_desc 
+            FROM V_SOMM_PAZ_NOS WHERE extension = '`+reparto+`'`,
+          [],
+          { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
+    
+        const rs = result.resultSet;
+        let row;
+        let riga = 1;
+  
+        worksheetPAZ.cell(riga,1).string('NOSOLOGICO').style(stylePAZ);
+        worksheetPAZ.cell(riga,2).string('AIC').style(stylePAZ);
+        worksheetPAZ.cell(riga,3).string('FARMACO').style(stylePAZ);
+        worksheetPAZ.cell(riga,4).string('UNITA').style(stylePAZ);
+        worksheetPAZ.cell(riga,5).string('QUANTITA').style(stylePAZ);
+        worksheetPAZ.cell(riga,6).string('INIZIO SOMMINISTRAZIONE').style(stylePAZ);
+        worksheetPAZ.cell(riga,7).string('VIA DI SOMMINISTRAZIONE').style(stylePAZ);
+  
+        riga++;
+  
+  
+        while ((row = await rs.getRow())) {
+          //console.log(riga);  
+          //console.log(row);
+          //console.log(row.ISTITUTO);
+          worksheetPAZ.cell(riga,1).string(row.EXTENSION).style(stylePAZ);
+          worksheetPAZ.cell(riga,2).string(row.ITEM_CODE).style(stylePAZ);
+          worksheetPAZ.cell(riga,3).string(row.ITEM_DESC).style(stylePAZ);
+          worksheetPAZ.cell(riga,4).string(row.QTY_UOM).style(stylePAZ);
+          worksheetPAZ.cell(riga,5).string(row.QTY).style(stylePAZ);
+          worksheetPAZ.cell(riga,6).string(row.ADMINISTERED_START).style(stylePAZ);
+          worksheetPAZ.cell(riga,7).string(row.ROUTE_DESC).style(stylePAZ);
+          riga++;
+        }
+  
+        //workbook.write('statistiche.xlsx', res);
+        console.log(101);
+        workbookPAZ.write(reparto+" "+ date + "-" + month + "-" + year+" ore " + hour+"-" + minutes+".xlsx", res);
+/*
+        workbook.writeToBuffer().then(function(buffer) {
+          //console.log(buffer);
+          console.log(102);
+          res.send(buffer);
+         
+        });
+  
+        */
+  
+    
+        await rs.close();
+        
+    } catch (err) {
+      console.error(err);
+    } finally {
+      if (connection) {
+        try {
+          await connection.close();
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    }
+  }
+
+
+
+/* Chiamata REST API per generazione excel terapia */
+app.get('/', (req, res) => {
+  res.send('STATS is up!');
+});
+
+app.get('/ward', (req, res) => {
+  
+  console.log("Richiesta ricevuta per report reparto:");
+  console.log(req.query);
+  //generaReportTerapia(req.params.wsd1+'/'+req.params.wsd2, res);
+  res.send(req.query);
+  //res.send("<h1>Ciao Libera!</h1>");
+//http://localhost:3000/ward/?unitCode=${hcu[ID_ROOT_ORG]}&encounterCode=${encounter[NOSOLOGIC]}
+
+});
+
+app.get('/encounter', (req, res) => {
+  
+  console.log("Richiesta ricevuta per report reparto:");
+  console.log(req.query);
+  generaReportTerapia(req.query.encounterCode, res);
+  //res.send(req.query.encounterCode);
+  //res.send("<h1>Vai PM!</h1>");
+
+});
+
+
 app.get('/health', function(request, response) {
-    console.log("Invocazione health");
+    //console.log("Invocazione health");
     if( healthy ) {
       response.status(200);
     } else {
