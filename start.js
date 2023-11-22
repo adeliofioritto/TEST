@@ -114,6 +114,4 @@ app.get('/health', function(request, response) {
     } else {
       response.status(500);
     }
-    let status = healthStatus();
-    response.send(status);
   });  
