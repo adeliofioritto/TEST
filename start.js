@@ -48,7 +48,7 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
-            console.log(contents);
+            EMAIL_PASSWORD = contents;
             console.log("- Found Email Password");
         }
     });
@@ -58,7 +58,7 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
-            console.log(contents);
+            DB_PASSWORD = contents;
             console.log("- Found DB Password");
         }
     });
@@ -72,7 +72,7 @@ if(hasDB_USER && hasDB_CONNECTION_STRING){
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
-            console.log(contents);
+            DB_USER = contents;
             console.log("- Found DB User");
         }
     });
@@ -81,7 +81,7 @@ if(hasDB_USER && hasDB_CONNECTION_STRING){
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
         } else {
-            console.log(contents);
+            DB_CONNECTION_STRING = contents;
             console.log("- Found DB Connection String");
         }
     });
@@ -89,6 +89,9 @@ if(hasDB_USER && hasDB_CONNECTION_STRING){
     console.log("Please check your config map. Variable or bind not setted.");
 }
 
-
+console.log(EMAIL_PASSWORD);
+console.log(DB_PASSWORD);
+console.log(DB_USER);
+console.log(DB_CONNECTION_STRING);
 
   
