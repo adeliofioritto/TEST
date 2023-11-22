@@ -252,8 +252,8 @@ app.get('/ward', (req, res) => {
   console.log("Richiesta ricevuta per report reparto:");
   console.log(req.query);
 
-  const unitCode = req.params.unitCode;
-  const idUser = req.params.idUser;
+  const unitCode = req.query.unitCode;
+  const idUser = req.query.idUser;
 
   //generaReportTerapia(req.params.wsd1+'/'+req.params.wsd2, res);
   //res.sendFile(__dirname + "/index.html");
