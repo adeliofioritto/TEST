@@ -17,6 +17,8 @@ app.use(bodyParser.json());
 
 const port = 3000;
 
+let healthy = true;
+
 let DB_USER = process.env.DB_USER || '/var/config/DB_USER';
 if (!path.isAbsolute(DB_USER)) { DB_USER = path.resolve(__dirname, DB_USER); }
 let hasDB_USER = fs.existsSync(DB_USER);
