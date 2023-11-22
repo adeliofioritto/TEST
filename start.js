@@ -77,7 +77,7 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
 if(hasDB_USER && hasDB_CONNECTION_STRING){
 
     DB_USER = fs.readFileSync(DB_USER,{ encoding: 'utf8', flag: 'r' });
-    DB_CONNECTION_STRING = fs.readFileSync(DB_CONNECTION_STRING,{ encoding: 'utf8', flag: 'r' });
+    DB_CONNECTION_STRING = "`" + fs.readFileSync(DB_CONNECTION_STRING,{ encoding: 'utf8', flag: 'r' }) + "`";
     /*
     fs.readFile(DB_USER, "utf8", function (err, contents) {
         if (err) {
@@ -276,3 +276,5 @@ app.get('/health', function(request, response) {
     let status = healthStatus();
     response.send(status);
   });  
+
+
