@@ -43,7 +43,7 @@ app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
 console.log("TEST STARTED");
 
 if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
-    fs.readFile(EMAIL_PASSWORD, "utf8", function (err, contents) {
+    fs.readFileSync(EMAIL_PASSWORD, "utf8", function (err, contents) {
         if (err) {
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
@@ -53,7 +53,7 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
         }
     });
     
-    fs.readFile(DB_PASSWORD, "utf8", function (err, contents) {
+    fs.readFileSync(DB_PASSWORD, "utf8", function (err, contents) {
         if (err) {
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
@@ -67,7 +67,7 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
 }
 
 if(hasDB_USER && hasDB_CONNECTION_STRING){
-    fs.readFile(DB_USER, "utf8", function (err, contents) {
+    fs.readFileSync(DB_USER, "utf8", function (err, contents) {
         if (err) {
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
@@ -76,7 +76,7 @@ if(hasDB_USER && hasDB_CONNECTION_STRING){
             console.log("- Found DB User");
         }
     });
-    fs.readFile(DB_CONNECTION_STRING, "utf8", function (err, contents) {
+    fs.readFileSync(DB_CONNECTION_STRING, "utf8", function (err, contents) {
         if (err) {
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
@@ -94,4 +94,12 @@ console.log(DB_PASSWORD);
 console.log(DB_USER);
 console.log(DB_CONNECTION_STRING);
 
-  
+app.get('/health', function(request, response) {
+    if( healthy ) {
+      response.status(200);
+    } else {
+      response.status(500);
+    }
+    let status = healthStatus();
+    response.send(status);
+  });  
