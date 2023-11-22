@@ -248,9 +248,7 @@ app.get('/ward', (req, res) => {
   console.log("Richiesta ricevuta per report reparto:");
   console.log(req.query);
   //generaReportTerapia(req.params.wsd1+'/'+req.params.wsd2, res);
-  res.send(req.query);
-  //res.send("<h1>Ciao Libera!</h1>");
-//http://localhost:3000/ward/?unitCode=${hcu[ID_ROOT_ORG]}&encounterCode=${encounter[NOSOLOGIC]}
+  res.sendFile(__dirname + "/ward.html");
 
 });
 
@@ -259,9 +257,6 @@ app.get('/encounter', (req, res) => {
   console.log("Richiesta ricevuta per report paziente:");
   console.log(req.query);
   generaReportTerapia(req.query.encounterCode, res);
-  //res.send(req.query.encounterCode);
-  //res.send("<h1>Vai PM!</h1>");
-
 });
 
 
@@ -275,5 +270,3 @@ app.get('/health', function(request, response) {
     let status = healthStatus();
     response.send(status);
   });  
-
-
