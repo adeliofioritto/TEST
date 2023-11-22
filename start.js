@@ -117,6 +117,7 @@ function healthStatus() {
   }
 
 app.get('/health', function(request, response) {
+    console.log("Invocazione health");
     if( healthy ) {
       response.status(200);
     } else {
