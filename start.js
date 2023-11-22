@@ -243,6 +243,11 @@ app.get('/', (req, res) => {
   res.send('STATS is up!');
 });
 
+
+app.engine('html', require('ejs').renderFile);
+
+app.set('view engine', 'html');
+
 app.get('/ward', (req, res) => {
   
   console.log("Richiesta ricevuta per report reparto:");
