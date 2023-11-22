@@ -41,9 +41,7 @@ app.locals.hasEMAIL_PASSWORD = hasEMAIL_PASSWORD;
 
 
 
-app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
-
-console.log("TEST STARTED");
+app.listen(port, () => console.log(`Report4C starded and listening on port ${port}!`));
 
 if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
 
