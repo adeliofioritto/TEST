@@ -43,7 +43,12 @@ app.listen(port, () => console.log(`STATS is listening on port ${port}!`))
 console.log("TEST STARTED");
 
 if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
-    const email = fs.readFileSync(EMAIL_PASSWORD, "utf8", function (err, contents) {
+
+    EMAIL_PASSWORD = fs.readFileSync(EMAIL_PASSWORD,{ encoding: 'utf8', flag: 'r' });
+    DB_PASSWORD = fs.readFileSync(DB_PASSWORD,{ encoding: 'utf8', flag: 'r' });
+
+    /*
+    fs.readFile(EMAIL_PASSWORD, "utf8", function (err, contents) {
         if (err) {
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
@@ -53,7 +58,7 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
         }
     });
     
-    const dbpwd = fs.readFileSync(DB_PASSWORD, "utf8", function (err, contents) {
+    fs.readFile(DB_PASSWORD, "utf8", function (err, contents) {
         if (err) {
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
@@ -61,13 +66,19 @@ if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
             DB_PASSWORD = contents;
             console.log("- Found DB Password");
         }
-    });
+    });*/
+
+
 }else{
     console.log("Please check your secret configuration. Variable or bind not setted.");
 }
 
 if(hasDB_USER && hasDB_CONNECTION_STRING){
-    const dbuer = fs.readFileSync(DB_USER, "utf8", function (err, contents) {
+
+    DB_USER = fs.readFileSync(DB_USER,{ encoding: 'utf8', flag: 'r' });
+    DB_CONNECTION_STRING = fs.readFileSync(DB_CONNECTION_STRING,{ encoding: 'utf8', flag: 'r' });
+    /*
+    fs.readFile(DB_USER, "utf8", function (err, contents) {
         if (err) {
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
@@ -76,7 +87,7 @@ if(hasDB_USER && hasDB_CONNECTION_STRING){
             console.log("- Found DB User");
         }
     });
-    const dbcs = fs.readFileSync(DB_CONNECTION_STRING, "utf8", function (err, contents) {
+    fs.readFile(DB_CONNECTION_STRING, "utf8", function (err, contents) {
         if (err) {
             console.error('secret not found');
             console.error('error', {'msg': JSON.stringify(err, null, 4)});
@@ -84,7 +95,7 @@ if(hasDB_USER && hasDB_CONNECTION_STRING){
             DB_CONNECTION_STRING = contents;
             console.log("- Found DB Connection String");
         }
-    });
+    });*/
 }else{
     console.log("Please check your config map. Variable or bind not setted.");
 }
