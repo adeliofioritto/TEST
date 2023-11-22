@@ -243,22 +243,13 @@ app.get('/', (req, res) => {
   res.send('STATS is up!');
 });
 
-
-app.engine('html', require('ejs').renderFile);
-
-app.set('view engine', 'html');
-
 app.get('/ward', (req, res) => {
   
   console.log("Richiesta ricevuta per report reparto:");
   console.log(req.query);
-  const client_cred_access_token = 'fakeToken';
-  const client_cred_access_token2 = 'fakeToken2';
-
   //generaReportTerapia(req.params.wsd1+'/'+req.params.wsd2, res);
-  //res.sendFile(__dirname + "/ward.html");
-  res.render(path.join(__dirname, '/', 'ward.html'), {token: client_cred_access_token, token2: client_cred_access_token2 });
-
+  //res.sendFile(__dirname + "/index.html");
+  res.send('<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="app.css"> <title>Ward Page</title> </head> <body> <h1>test</h1> <h1><%= token2 %></h1> <div class="subscribe-container"> <form method="POST"> <input type="email" name="youremail" placeholder="Email Address" required> <input type="text" name="yourname" placeholder="Name" required> <input class="subscribe-button" type="submit" value="Subscribe"> </form> </div> </body> </html>');
 
 });
 
