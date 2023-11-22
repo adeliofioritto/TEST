@@ -108,10 +108,20 @@ console.log(DB_PASSWORD);
 console.log(DB_USER);
 console.log(DB_CONNECTION_STRING);
 
+function healthStatus() {
+    if (healthy) {
+      return "Service is UP";
+    } else {
+      return "Service is DOWN";
+    }
+  }
+
 app.get('/health', function(request, response) {
     if( healthy ) {
       response.status(200);
     } else {
       response.status(500);
     }
+    let status = healthStatus();
+    response.send(status);
   });  
