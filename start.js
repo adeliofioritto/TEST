@@ -15,6 +15,12 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
+app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')));
+app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
+app.use(express.static(__dirname + '/public'));
+app.use(cors())
+
 const port = 3000;
 
 let healthy = true;
@@ -260,6 +266,20 @@ app.get('/ward', (req, res) => {
   res.render(path.join(__dirname, '/', 'ward.html'), {unitCode: unitCode, idUser: idUser });
 
 });
+
+app.get('/wardreport', (req, res) => {
+  
+    console.log("Richiesta ricevuta per wardreport:");
+    console.log(req.query);
+  
+    const unitCode = req.query.unitCode;
+    const idUser = req.query.idUser;
+  
+    //generaReportTerapia(req.params.wsd1+'/'+req.params.wsd2, res);
+    //res.sendFile(__dirname + "/index.html");
+    //res.render(path.join(__dirname, '/', 'ward.html'), {unitCode: unitCode, idUser: idUser });
+  
+  });
 
 app.get('/encounter', (req, res) => {
   
