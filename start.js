@@ -256,7 +256,7 @@ app.get('/ward', (req, res) => {
 
   //generaReportTerapia(req.params.wsd1+'/'+req.params.wsd2, res);
   //res.sendFile(__dirname + "/ward.html");
-  res.render(path.join(__dirname, '/public', 'ward.html'), {token: client_cred_access_token});
+  res.render(path.join(__dirname, '/', 'ward.html'), {token: client_cred_access_token});
 
 
 });
