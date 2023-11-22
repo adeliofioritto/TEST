@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ostoy-config
+  name: report4c-config
 data:
   DB_USER: userDB
   DB_CONNECTION_STRING: csDB
