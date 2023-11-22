@@ -248,7 +248,7 @@ app.get('/ward', (req, res) => {
   console.log("Richiesta ricevuta per report reparto:");
   console.log(req.query);
   //generaReportTerapia(req.params.wsd1+'/'+req.params.wsd2, res);
-  res.sendFile(__dirname + "/ward.html");
+  res.sendFile(__dirname + "/ward.html?test=ade");
 
 });
 
