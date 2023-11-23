@@ -44,8 +44,9 @@
 
                 $('#suspendDatePicker').val('');
                 abilitaReport();
-            }
-        });
+            },
+            
+        }).on('input', function(e){abilitaReport()});
 
         $("#suspendDatePicker").datepicker({
             dateFormat: 'dd/mm/yy',
@@ -55,7 +56,7 @@
                 abilitaReport();
             }
 
-        });
+        }).on('input', function(e){abilitaReport()});
 
 
 
@@ -90,7 +91,8 @@
         console.log(date_suspstartDatePicker);
         var date_suspendDatePicker = $('#suspendDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
         console.log(date_suspendDatePicker);
-        //window.open('/wardreport/?idUser=<%= idUser %>&unitCode=<%= unitCode %>', '_blank');
+        //window.open('/wardreport/?funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>', '_blank');
+        window.open('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=p4cdoctor&unitCode=PSD_PSD_071', '_blank');
 
     }
 </script>
@@ -105,10 +107,10 @@
     </div>
 
     <label for="suspstartDatePicker">Data inizio</label>
-    <input type="text" id="suspstartDatePicker" name="suspendfrom" class="form-control-lg" placeholder="Inizio">
+    <input type="text" id="suspstartDatePicker" name="suspendfrom" class="form-control-lg" placeholder="Inizio" readonly>
 
     <label for="suspendDatePicker">Data Fine</label>
-    <input type="text" id="suspendDatePicker" name="suspendto" class="form-control-lg" placeholder="Fine">
+    <input type="text" id="suspendDatePicker" name="suspendto" class="form-control-lg" placeholder="Fine" readonly>
 
      <br/><br/>
 
@@ -120,7 +122,7 @@
             </div>
             <div class="card-body">
                 <p>Totale quantità prescritta, arrotondata per eccesso all'intero della singola somministrazione.</p>
-                <button type="button" id="report01" onclick="generaReportSomministrazione('reportSomministrazione')" class="w-100 btn btn-lg btn-outline-primary">Scarica report</button>
+                <button type="button" id="report01" onclick="generaReportSomministrazione('carrello')" class="w-100 btn btn-lg btn-outline-primary">Genera report</button>
             </div>
           </div>
         </div>
@@ -131,18 +133,18 @@
             </div>
             <div class="card-body">
                 <p>Totale quantità prescritta, arrotondata per eccesso all'intero di ogni prescrizione.</p>
-                <button type="button" id="report02" onclick="generaReportSomministrazione('reportPrescrizione')" class="w-100 btn btn-lg btn-outline-primary">Scarica report</button>
+                <button type="button" id="report02" onclick="generaReportSomministrazione('farmacia')" class="w-100 btn btn-lg btn-outline-primary">Genera report</button>
             </div>
           </div>
         </div>
         <div class="col">
           <div class="card mb-4 rounded-3 shadow-sm border-primary">
             <div class="card-header py-3 text-bg-primary border-primary">
-              <h4 class="my-0 fw-normal">test</h4>
+              <h4 class="my-0 fw-normal">Reportistica Amministrativa</h4>
             </div>
             <div class="card-body">
-                <p>test</p>
-                <button type="button" id="report03" onclick="generaReportSomministrazione()" class="w-100 btn btn-lg btn-outline-primary">Scarica report</button>
+                <p>Estrazione dei farmaci prescritti e somministrati, su base almeno settimanale.</p>
+                <button type="button" id="report03" onclick="generaReportSomministrazione('pazienti')" class="w-100 btn btn-lg btn-outline-primary">Genera report</button>
             </div>
           </div>
         </div>
