@@ -10,8 +10,9 @@ const cors = require('cors');
 const path = require('path');
 const { readFileSync } = require('fs');
 require('log-timestamp');
-
 const app = express();
+var server = require('http').createServer(app);
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -47,7 +48,7 @@ app.locals.hasEMAIL_PASSWORD = hasEMAIL_PASSWORD;
 
 
 
-app.listen(port, () => console.log(`Report4C starded and listening on port ${port}!`));
+server.listen(port, () => console.log(`Report4C starded and listening on port ${port}!`));
 
 if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
 
@@ -172,6 +173,17 @@ async function generaReportTerapia(reparto,res) {
     try {
       connection = await oracledb.getConnection({ user: DB_USER, password: DB_PASSWORD, connectionString: DB_CONNECTION_STRING });
 
+      /*
+      SELECT to_char(extension) extension,
+                  to_char(item_code) item_code,
+                  to_char(item_desc) item_desc,
+                  CASE WHEN (NVL(qty_uom,'')) is NULL then ' ' ELSE TO_CHAR(NVL(qty_uom,'')) END qty_uom,
+                  CASE WHEN (NVL(qty,'')) is NULL then ' ' ELSE TO_CHAR(NVL(qty,'')) END qty,
+                  CASE WHEN TO_CHAR(NVL(qty_uom,'')) IN ('cpr') THEN  TO_CHAR(ROUND(qty,0)) ELSE TO_CHAR(NVL(qty,''))  END qty_arr,                  
+                  TO_CHAR(administered_start, 'YYYY-MM-DD HH24:MM') administered_start,
+                  to_char(route_desc) route_desc 
+            FROM V_SOMM_PAZ_NOS WHERE extension = '23DEG000009@030122/PSD_PSD'
+      */
       //Primo Foglio
       result = await connection.execute(
           `SELECT to_char(extension) extension,
