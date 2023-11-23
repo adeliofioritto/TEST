@@ -10,9 +10,8 @@ const cors = require('cors');
 const path = require('path');
 const { readFileSync } = require('fs');
 require('log-timestamp');
-const app = express();
-var server = require('http').createServer(app);
 
+const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -48,7 +47,7 @@ app.locals.hasEMAIL_PASSWORD = hasEMAIL_PASSWORD;
 
 
 
-server.listen(port, () => console.log(`Report4C starded and listening on port ${port}!`));
+app.listen(port, () => console.log(`Report4C starded and listening on port ${port}!`));
 
 if(hasEMAIL_PASSWORD && hasDB_PASSWORD){
 
