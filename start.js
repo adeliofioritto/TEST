@@ -208,14 +208,14 @@ async function generaReportTerapia(reparto,res) {
             to_char(data_fine_prescrizione) data_fine_prescrizione,
             to_char(codice_farmaco_prescritto) codice_farmaco_prescritto,
             to_char(descrizione_farmacto_prescritto) descrizione_farmacto_prescritto,
-            to_char(forma_farmaceutica_prescritta) forma_farmaceutica_prescritta,
+            CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,
             to_char(codice_farmaco_somministrato) codice_farmaco_somministrato,
             to_char(descrizione_farmacto_somministrato) descrizione_farmacto_somministrato,
             CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
             CASE WHEN (NVL(quantita,'')) is NULL then ' ' ELSE TO_CHAR(NVL(quantita,'')) END quantita,
             to_char(stato) stato,
             to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
-            CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then 'x' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
+            CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
             to_char(route_desc) route_desc
         FROM
             v_somm_paz_nos_v2 WHERE extension = '`+reparto+`'`,
