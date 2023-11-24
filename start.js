@@ -215,7 +215,7 @@ async function generaReportTerapia(reparto,res) {
             CASE WHEN (NVL(quantita,'')) is NULL then ' ' ELSE TO_CHAR(NVL(quantita,'')) END quantita,
             to_char(stato) stato,
             to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
-            CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
+            CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then 'x' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
             to_char(route_desc) route_desc
         FROM
             v_somm_paz_nos_v2 WHERE extension = '`+reparto+`'`,
