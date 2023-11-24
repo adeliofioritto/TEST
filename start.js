@@ -440,7 +440,7 @@ async function generaReportReparto(dati,res) {
       }
 
       if (dati.funzione === 'carrello' || dati.funzione === 'farmacia'){
-        result = await connection.execute(
+        result2 = await connection.execute(
           `WITH appoggio as (
             select * from v_somm_presc_ward
             ) 
@@ -464,8 +464,8 @@ async function generaReportReparto(dati,res) {
           { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
 
   
-      const rs2 = result.resultSet;
-      let row;
+      const rs2 = result2.resultSet;
+      let row2;
       let riga = 1;
 
       worksheetPAZ.cell(riga,1).string('DA').style(stylePAZ);
@@ -485,23 +485,23 @@ async function generaReportReparto(dati,res) {
       riga++;
 
 
-      while ((row = await rs2.getRow())) {
+      while ((row2 = await rs2.getRow())) {
         //console.log(riga);  
         //console.log(row);
         //console.log(row.ISTITUTO);
         worksheetPAZ.cell(riga,1).string(dati.dataIniziale).style(stylePAZ);
         worksheetPAZ.cell(riga,2).string(dati.dataFinale).style(stylePAZ);
-        worksheetPAZ.cell(riga,3).string(row.STRUTTURA).style(stylePAZ);
-        worksheetPAZ.cell(riga,4).string(row.CODICE_REPARTO_ASSISTENZIALE).style(stylePAZ);
-        worksheetPAZ.cell(riga,5).string(row.REPARTO_ASSISTENZIALE).style(stylePAZ);
-        worksheetPAZ.cell(riga,6).string(row.CODICE_REPARTO_GIURIDICO).style(stylePAZ);
-        worksheetPAZ.cell(riga,7).string(row.REPARTO_GIURIDICO).style(stylePAZ);
-        worksheetPAZ.cell(riga,8).string(row.CODICE_FARMACO_PRESCRITTO).style(stylePAZ);
-        worksheetPAZ.cell(riga,9).string(row.DESCRIZIONE_FARMACTO_PRESCRITTO).style(stylePAZ);
-        worksheetPAZ.cell(riga,10).string(row.UNITA_DI_MISURA).style(stylePAZ);
-        worksheetPAZ.cell(riga,11).string(row.FORMA_FARMACEUTICA_PRESCRITTA).style(stylePAZ);
-        worksheetPAZ.cell(riga,12).string(row.ATC_CODE).style(stylePAZ);
-        worksheetPAZ.cell(riga,13).string(row.QTY_ARROTONDATA).style(stylePAZ);
+        worksheetPAZ.cell(riga,3).string(row2.STRUTTURA).style(stylePAZ);
+        worksheetPAZ.cell(riga,4).string(row2.CODICE_REPARTO_ASSISTENZIALE).style(stylePAZ);
+        worksheetPAZ.cell(riga,5).string(row2.REPARTO_ASSISTENZIALE).style(stylePAZ);
+        worksheetPAZ.cell(riga,6).string(row2.CODICE_REPARTO_GIURIDICO).style(stylePAZ);
+        worksheetPAZ.cell(riga,7).string(row2.REPARTO_GIURIDICO).style(stylePAZ);
+        worksheetPAZ.cell(riga,8).string(row2.CODICE_FARMACO_PRESCRITTO).style(stylePAZ);
+        worksheetPAZ.cell(riga,9).string(row2.DESCRIZIONE_FARMACTO_PRESCRITTO).style(stylePAZ);
+        worksheetPAZ.cell(riga,10).string(row2.UNITA_DI_MISURA).style(stylePAZ);
+        worksheetPAZ.cell(riga,11).string(row2.FORMA_FARMACEUTICA_PRESCRITTA).style(stylePAZ);
+        worksheetPAZ.cell(riga,12).string(row2.ATC_CODE).style(stylePAZ);
+        worksheetPAZ.cell(riga,13).string(row2.QTY_ARROTONDATA).style(stylePAZ);
 
         riga++;
       }
