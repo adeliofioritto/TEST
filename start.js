@@ -346,7 +346,7 @@ async function generaReportReparto(dati,res) {
       //http://localhost:3000/encounter/?encounterCode=23DEG000009%40030122%2FPSD_PSD&idUser=p4cdoctor&unitCode=PSD_PSD_071
       
 
-       if (dati.funzione == 'pazienti'){
+       if (dati.funzione === 'pazienti'){
 
         result = await connection.execute(
           `SELECT
@@ -439,7 +439,7 @@ async function generaReportReparto(dati,res) {
 
       }
 
-      if (dati.funzione == 'carrello' || dati.funzione == 'farmacia'){
+      if (dati.funzione === 'carrello' || dati.funzione === 'farmacia'){
         result = await connection.execute(
           `WITH appoggio as (
             select * from v_somm_presc_ward
