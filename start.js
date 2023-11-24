@@ -437,8 +437,9 @@ async function generaReportReparto(dati,res) {
         workbookPAZ.write(dati.funzione+" "+dati.unitCode+" "+ date + "-" + month + "-" + year+" ore " + hour+"-" + minutes+".xlsx", res);
         await rs.close();
 
-      }      
-      else{
+      }
+
+      if (dati.funzione == 'carrello' || dati.funzione == 'farmacia'){
         result = await connection.execute(
           `WITH appoggio as (
             select * from v_somm_presc_ward
