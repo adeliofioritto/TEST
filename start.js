@@ -119,32 +119,15 @@ function healthStatus() {
       return "Service is DOWN";
     }
   }
-
-
-
-// Create a new instance of a Workbook class
-var workbook = new excel.Workbook();
-var workbookPAZ = new excel.Workbook();
-
-// Add Worksheets to the workbook
-var worksheetPAZ = workbookPAZ.addWorksheet('FARMACI_PAZIENTE');
-
-// Create a reusable style
-var style = workbook.createStyle({
-  font: {
-    color: '#000000',
-    size: 10
-  }});
-
-var stylePAZ = workbookPAZ.createStyle({
-  font: {
-    color: '#000000',
-    size: 10
-  }});
-  
-
-
+ 
 async function generaReportTerapia(reparto,res) {
+
+  var workbook = new excel.Workbook();
+  var workbookPAZ = new excel.Workbook();
+  var worksheetPAZ = workbookPAZ.addWorksheet('FARMACI_PAZIENTE');
+  var style = workbook.createStyle({font: {color: '#000000',size: 10}});
+  var stylePAZ = workbookPAZ.createStyle({font: {color: '#000000',size: 10}});
+
   //console.log("nosologico: "+reparto);
   let ts = Date.now();
   
@@ -310,6 +293,13 @@ async function generaReportTerapia(reparto,res) {
 
 
 async function generaReportReparto(dati,res) {
+
+  var workbook = new excel.Workbook();
+  var workbookPAZ = new excel.Workbook();
+  var worksheetPAZ = workbookPAZ.addWorksheet('FARMACI_PAZIENTE');
+  var style = workbook.createStyle({font: {color: '#000000',size: 10}});
+  var stylePAZ = workbookPAZ.createStyle({font: {color: '#000000',size: 10}});
+  
   console.log("dati passati: ");
   console.log(dati.dataIniziale);
   console.log(dati.dataFinale);
