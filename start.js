@@ -178,6 +178,7 @@ async function generaReportTerapia(reparto,res) {
           [],
           { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });*/
 
+          /*
           result = await connection.execute(
             `SELECT
             to_char(struttura) struttura,
@@ -204,32 +205,56 @@ async function generaReportTerapia(reparto,res) {
             v_somm_paz_nos_v2 WHERE extension = '`+reparto+`'`,
             [],
             { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
+*/
 
+      /* Modificata in data 27/11/2023, eliminati codici reparti ass e giu, filtro solo per COMPLETED */
+      result = await connection.execute(
+        `SELECT
+        to_char(struttura) struttura,
+        to_char(reparto_assistenziale) reparto_assistenziale,
+        to_char(reparto_giuridico) reparto_giuridico,
+        to_char(id_people) id_people,
+        to_char(EXTENSION) EXTENSION,
+        to_char(data_inizio_prescrizione) data_inizio_prescrizione,
+        to_char(data_fine_prescrizione) data_fine_prescrizione,
+        to_char(codice_farmaco_prescritto) codice_farmaco_prescritto,
+        to_char(descrizione_farmacto_prescritto) descrizione_farmacto_prescritto,
+        CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,
+        to_char(codice_farmaco_somministrato) codice_farmaco_somministrato,
+        to_char(descrizione_farmacto_somministrato) descrizione_farmacto_somministrato,
+        CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
+        CASE WHEN (NVL(quantita,'')) is NULL then ' ' ELSE TO_CHAR(NVL(quantita,'')) END quantita,
+        to_char(stato) stato,
+        to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
+        CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
+        to_char(route_desc) route_desc
+      FROM
+        v_somm_paz_nos_v2 WHERE extension = '`+reparto+`'`,
+        [],
+        { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });    
     
         const rs = result.resultSet;
         let row;
         let riga = 1;
   
         worksheetPAZ.cell(riga,1).string('STRUTTURA').style(stylePAZ);
-        worksheetPAZ.cell(riga,2).string('CODICE_REPARTO_ASSISTENZIALE').style(stylePAZ);
-        worksheetPAZ.cell(riga,3).string('REPARTO_ASSISTENZIALE').style(stylePAZ);
-        worksheetPAZ.cell(riga,4).string('CODICE_REPARTO_GIURIDICO').style(stylePAZ);
-        worksheetPAZ.cell(riga,5).string('REPARTO_GIURIDICO').style(stylePAZ);
-        worksheetPAZ.cell(riga,6).string('ID_PEOPLE').style(stylePAZ);
-        worksheetPAZ.cell(riga,7).string('EXTENSION').style(stylePAZ);
-        worksheetPAZ.cell(riga,8).string('DATA_INIZIO_PRESCRIZIONE').style(stylePAZ);
-        worksheetPAZ.cell(riga,9).string('DATA_FINE_PRESCRIZIONE').style(stylePAZ);
-        worksheetPAZ.cell(riga,10).string('CODICE_FARMACO_PRESCRITTO').style(stylePAZ);
-        worksheetPAZ.cell(riga,11).string('DESCRIZIONE_FARMACTO_PRESCRITTO').style(stylePAZ);
-        worksheetPAZ.cell(riga,12).string('FORMA_FARMACEUTICA_PRESCRITTA').style(stylePAZ);
-        worksheetPAZ.cell(riga,13).string('CODICE_FARMACO_SOMMINISTRATO').style(stylePAZ);
-        worksheetPAZ.cell(riga,14).string('DESCRIZIONE_FARMACTO_SOMMINISTRATO').style(stylePAZ);        
-        worksheetPAZ.cell(riga,15).string('UNITA_DI_MISURA').style(stylePAZ);
-        worksheetPAZ.cell(riga,16).string('QUANTITA').style(stylePAZ);
-        worksheetPAZ.cell(riga,17).string('STATO').style(stylePAZ);
-        worksheetPAZ.cell(riga,18).string('DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA').style(stylePAZ);
-        worksheetPAZ.cell(riga,19).string('DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA').style(stylePAZ);
-        worksheetPAZ.cell(riga,20).string('ROUTE_DESC').style(stylePAZ);
+        worksheetPAZ.cell(riga,2).string('REPARTO_ASSISTENZIALE').style(stylePAZ);
+        worksheetPAZ.cell(riga,3).string('REPARTO_GIURIDICO').style(stylePAZ);
+        worksheetPAZ.cell(riga,4).string('ID_PEOPLE').style(stylePAZ);
+        worksheetPAZ.cell(riga,5).string('NOSOLOGICO').style(stylePAZ);
+        worksheetPAZ.cell(riga,6).string('DATA_INIZIO_PRESCRIZIONE').style(stylePAZ);
+        worksheetPAZ.cell(riga,7).string('DATA_FINE_PRESCRIZIONE').style(stylePAZ);
+        worksheetPAZ.cell(riga,8).string('CODICE_FARMACO_PRESCRITTO').style(stylePAZ);
+        worksheetPAZ.cell(riga,9).string('DESCRIZIONE_FARMACTO_PRESCRITTO').style(stylePAZ);
+        worksheetPAZ.cell(riga,10).string('FORMA_FARMACEUTICA_PRESCRITTA').style(stylePAZ);
+        worksheetPAZ.cell(riga,11).string('CODICE_FARMACO_SOMMINISTRATO').style(stylePAZ);
+        worksheetPAZ.cell(riga,12).string('DESCRIZIONE_FARMACTO_SOMMINISTRATO').style(stylePAZ);        
+        worksheetPAZ.cell(riga,13).string('UNITA_DI_MISURA').style(stylePAZ);
+        worksheetPAZ.cell(riga,14).string('QUANTITA').style(stylePAZ);
+        worksheetPAZ.cell(riga,15).string('STATO').style(stylePAZ);
+        worksheetPAZ.cell(riga,16).string('DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA').style(stylePAZ);
+        worksheetPAZ.cell(riga,17).string('DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA').style(stylePAZ);
+        worksheetPAZ.cell(riga,18).string('ROUTE_DESC').style(stylePAZ);
  
   
   
@@ -241,25 +266,23 @@ async function generaReportTerapia(reparto,res) {
           //console.log(row);
           //console.log(row.ISTITUTO);
           worksheetPAZ.cell(riga,1).string(row.STRUTTURA).style(stylePAZ);
-          worksheetPAZ.cell(riga,2).string(row.CODICE_REPARTO_ASSISTENZIALE).style(stylePAZ);
-          worksheetPAZ.cell(riga,3).string(row.REPARTO_ASSISTENZIALE).style(stylePAZ);
-          worksheetPAZ.cell(riga,4).string(row.CODICE_REPARTO_GIURIDICO).style(stylePAZ);
-          worksheetPAZ.cell(riga,5).string(row.REPARTO_GIURIDICO).style(stylePAZ);
-          worksheetPAZ.cell(riga,6).string(row.ID_PEOPLE).style(stylePAZ);
-          worksheetPAZ.cell(riga,7).string(row.EXTENSION).style(stylePAZ);
-          worksheetPAZ.cell(riga,8).string(row.DATA_INIZIO_PRESCRIZIONE).style(stylePAZ);
-          worksheetPAZ.cell(riga,9).string(row.DATA_FINE_PRESCRIZIONE).style(stylePAZ);
-          worksheetPAZ.cell(riga,10).string(row.CODICE_FARMACO_PRESCRITTO).style(stylePAZ);
-          worksheetPAZ.cell(riga,11).string(row.DESCRIZIONE_FARMACTO_PRESCRITTO).style(stylePAZ);
-          worksheetPAZ.cell(riga,12).string(row.FORMA_FARMACEUTICA_PRESCRITTA).style(stylePAZ);
-          worksheetPAZ.cell(riga,13).string(row.CODICE_FARMACO_SOMMINISTRATO).style(stylePAZ);
-          worksheetPAZ.cell(riga,14).string(row.DESCRIZIONE_FARMACTO_SOMMINISTRATO).style(stylePAZ);
-          worksheetPAZ.cell(riga,15).string(row.UNITA_DI_MISURA).style(stylePAZ);
-          worksheetPAZ.cell(riga,16).string(row.QUANTITA).style(stylePAZ);
-          worksheetPAZ.cell(riga,17).string(row.STATO).style(stylePAZ);
-          worksheetPAZ.cell(riga,18).string(row.DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA).style(stylePAZ);
-          worksheetPAZ.cell(riga,19).string(row.DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA).style(stylePAZ);
-          worksheetPAZ.cell(riga,20).string(row.ROUTE_DESC).style(stylePAZ);
+          worksheetPAZ.cell(riga,2).string(row.REPARTO_ASSISTENZIALE).style(stylePAZ);
+          worksheetPAZ.cell(riga,3).string(row.REPARTO_GIURIDICO).style(stylePAZ);
+          worksheetPAZ.cell(riga,4).string(row.ID_PEOPLE).style(stylePAZ);
+          worksheetPAZ.cell(riga,5).string(row.EXTENSION).style(stylePAZ);
+          worksheetPAZ.cell(riga,6).string(row.DATA_INIZIO_PRESCRIZIONE).style(stylePAZ);
+          worksheetPAZ.cell(riga,7).string(row.DATA_FINE_PRESCRIZIONE).style(stylePAZ);
+          worksheetPAZ.cell(riga,8).string(row.CODICE_FARMACO_PRESCRITTO).style(stylePAZ);
+          worksheetPAZ.cell(riga,9).string(row.DESCRIZIONE_FARMACTO_PRESCRITTO).style(stylePAZ);
+          worksheetPAZ.cell(riga,10).string(row.FORMA_FARMACEUTICA_PRESCRITTA).style(stylePAZ);
+          worksheetPAZ.cell(riga,11).string(row.CODICE_FARMACO_SOMMINISTRATO).style(stylePAZ);
+          worksheetPAZ.cell(riga,12).string(row.DESCRIZIONE_FARMACTO_SOMMINISTRATO).style(stylePAZ);
+          worksheetPAZ.cell(riga,13).string(row.UNITA_DI_MISURA).style(stylePAZ);
+          worksheetPAZ.cell(riga,14).string(row.QUANTITA).style(stylePAZ);
+          worksheetPAZ.cell(riga,15).string(row.STATO).style(stylePAZ);
+          worksheetPAZ.cell(riga,16).string(row.DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA).style(stylePAZ);
+          worksheetPAZ.cell(riga,17).string(row.DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA).style(stylePAZ);
+          worksheetPAZ.cell(riga,18).string(row.ROUTE_DESC).style(stylePAZ);
           riga++;
         }
   
