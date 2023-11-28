@@ -61,15 +61,10 @@
 
 
         function abilitaReport(){
-            var date_suspstartDatePicker = $('#suspstartDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
-        console.log(date_suspstartDatePicker);
-        var date_suspendDatePicker = $('#suspendDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
-        console.log(date_suspendDatePicker);
             if ($('#suspstartDatePicker').datepicker('getDate') != null && $('#suspendDatePicker').datepicker('getDate') != null){
                 $('#report01').prop('disabled', false);
                 $('#report02').prop('disabled', false);
                 $('#report03').prop('disabled', false);
-                $('#generaReportSomministrazione_carrello').attr('href','/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione=carrello&idUser=<%= idUser %>&unitCode=<%= unitCode %>');
             }else{
                 $('#report01').prop('disabled', true);
                 $('#report02').prop('disabled', true);
@@ -130,9 +125,7 @@
             </div>
             <div class="card-body">
                 <p>Totale quantità prescritta, arrotondata per eccesso all'intero della singola somministrazione.</p>
-                <a id = 'generaReportSomministrazione_carrello' href='#' className='text-decoration-none'>
-                    <button type="button" id="report01"  class="w-100 btn btn-lg btn-outline-primary">Genera report</button>
-                </a>
+                <button type="button" id="report01" onclick="generaReportSomministrazione('carrello')" class="w-100 btn btn-lg btn-outline-primary">Genera report</button>
             </div>
           </div>
         </div>
