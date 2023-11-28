@@ -61,6 +61,10 @@
 
 
         function abilitaReport(){
+            var date_suspstartDatePicker = $('#suspstartDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+        console.log(date_suspstartDatePicker);
+        var date_suspendDatePicker = $('#suspendDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+        console.log(date_suspendDatePicker);
             if ($('#suspstartDatePicker').datepicker('getDate') != null && $('#suspendDatePicker').datepicker('getDate') != null){
                 $('#report01').prop('disabled', false);
                 $('#report02').prop('disabled', false);
