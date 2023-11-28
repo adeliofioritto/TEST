@@ -457,6 +457,8 @@ async function generaReportReparto(dati,res) {
       }
 
       if (dati.funzione === 'carrello' || dati.funzione === 'farmacia'){
+        
+        /* 
         result2 = await connection.execute(
           `WITH appoggio as (
             select * from v_somm_presc_ward
@@ -478,7 +480,31 @@ async function generaReportReparto(dati,res) {
             group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_reparto_giuridico,reparto_giuridico,codice_farmaco_prescritto,descrizione_farmacto_prescritto,unita_di_misura,forma_farmaceutica_prescritta,atc_code
             order by descrizione_farmacto_prescritto`,
           [],
-          { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
+          { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });*/
+
+          /* /* MODIFICATA IL 28/11/2023 PER GESTIRE I DECIMALI */
+          result2 = await connection.execute(
+            `WITH appoggio as (
+              select * from v_somm_presc_ward
+              ) 
+              select 
+                struttura,
+                CASE WHEN (NVL(codice_reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(codice_reparto_assistenziale,'')) END codice_reparto_assistenziale,
+                CASE WHEN (NVL(reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(reparto_assistenziale,'')) END reparto_assistenziale,
+                codice_reparto_giuridico,
+                reparto_giuridico,
+                codice_farmaco_prescritto,
+                descrizione_farmacto_prescritto,
+                unita_di_misura,
+                CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,                
+                atc_code, 
+                CASE WHEN (NVL(sum(qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL(sum(qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata
+                from appoggio 
+              where appoggio.planned_start between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+`','DD/MM/YYYY') + (86399/86400) and (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')
+              group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_reparto_giuridico,reparto_giuridico,codice_farmaco_prescritto,descrizione_farmacto_prescritto,unita_di_misura,forma_farmaceutica_prescritta,atc_code
+              order by descrizione_farmacto_prescritto`,
+            [],
+            { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
 
   
       const rs2 = result2.resultSet;
