@@ -495,7 +495,7 @@ async function generaReportReparto(dati,res) {
                 reparto_giuridico,
                 codice_farmaco_prescritto,
                 descrizione_farmacto_prescritto,
-                unita_di_misura,
+                CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
                 CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,                
                 atc_code, 
                 CASE WHEN (NVL(sum(qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL(sum(qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata
@@ -574,7 +574,7 @@ async function generaReportReparto(dati,res) {
 
 /* Chiamata REST API per generazione excel terapia */
 app.get('/', (req, res) => {
-  res.send('STATS is up!');
+  res.send('Report4C is up!');
 });
 
 
