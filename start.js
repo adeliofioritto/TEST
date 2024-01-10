@@ -380,6 +380,7 @@ async function generaReportReparto(dati,res) {
           CASE WHEN (NVL(descrizione_farmacto_somministrato,'')) is NULL then ' ' ELSE TO_CHAR(NVL(descrizione_farmacto_somministrato,'')) END descrizione_farmacto_somministrato,
           CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
           CASE WHEN (NVL(quantita,'')) is NULL then ' ' ELSE TO_CHAR(NVL(quantita,'')) END quantita,
+          CASE WHEN (NVL(sum(qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL(sum(qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata,
           to_char(stato) stato,
           to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
           CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
@@ -413,10 +414,11 @@ async function generaReportReparto(dati,res) {
       worksheetPAZ.cell(riga,17).string('DESCRIZIONE_FARMACTO_SOMMINISTRATO').style(stylePAZ);        
       worksheetPAZ.cell(riga,18).string('UNITA_DI_MISURA').style(stylePAZ);
       worksheetPAZ.cell(riga,19).string('QUANTITA').style(stylePAZ);
-      worksheetPAZ.cell(riga,20).string('STATO').style(stylePAZ);
-      worksheetPAZ.cell(riga,21).string('DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA').style(stylePAZ);
-      worksheetPAZ.cell(riga,22).string('DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA').style(stylePAZ);
-      worksheetPAZ.cell(riga,23).string('ROUTE_DESC').style(stylePAZ);
+      worksheetPAZ.cell(riga,20).string('QTY_ARROTONDATA').style(stylePAZ);      
+      worksheetPAZ.cell(riga,21).string('STATO').style(stylePAZ);
+      worksheetPAZ.cell(riga,22).string('DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA').style(stylePAZ);
+      worksheetPAZ.cell(riga,23).string('DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA').style(stylePAZ);
+      worksheetPAZ.cell(riga,24).string('ROUTE_DESC').style(stylePAZ);
 
 
 
@@ -446,10 +448,11 @@ async function generaReportReparto(dati,res) {
         worksheetPAZ.cell(riga,17).string(row.SOSTITUIBILITA).style(stylePAZ);
         worksheetPAZ.cell(riga,18).string(row.UNITA_DI_MISURA).style(stylePAZ);
         worksheetPAZ.cell(riga,19).string(row.QUANTITA).style(stylePAZ);
-        worksheetPAZ.cell(riga,20).string(row.STATO).style(stylePAZ);
-        worksheetPAZ.cell(riga,21).string(row.DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA).style(stylePAZ);
-        worksheetPAZ.cell(riga,22).string(row.DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA).style(stylePAZ);
-        worksheetPAZ.cell(riga,23).string(row.ROUTE_DESC).style(stylePAZ);
+        worksheetPAZ.cell(riga,20).string(row.QTY_ARROTONDATA).style(stylePAZ);
+        worksheetPAZ.cell(riga,21).string(row.STATO).style(stylePAZ);
+        worksheetPAZ.cell(riga,22).string(row.DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA).style(stylePAZ);
+        worksheetPAZ.cell(riga,23).string(row.DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA).style(stylePAZ);
+        worksheetPAZ.cell(riga,24).string(row.ROUTE_DESC).style(stylePAZ);
         riga++;
       }
   
