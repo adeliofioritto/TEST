@@ -23,10 +23,120 @@
         body{
             margin:15px;
         }
+        .dataeora{
+            margin: 15px 0 15px 0;
+        }
+        .nascondi{
+            visibility: hidden;
+            display: none;
+        }
+        .btn-outline-primary.disabled, .btn-outline-primary:disabled{
+            border-color: red;
+            color:red;
+        }
     </style>
 </head>
 <script>
     $(document).ready(function () {
+
+        /* CARRELLO */
+        $("#suspstartDatePickerCar").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            minDate: '0', //fin quando indietro
+
+            onSelect: function (selected) {
+                var date = $(this).datepicker('getDate');
+                var limit = $(this).datepicker('getDate');
+
+                date.setDate(date.getDate() + 0); // The End date must be 0 days after the start date
+                limit.setDate(limit.getDate() + 6); // The End date can only be maximum 6 days from today
+
+                $("#suspendDatePickerCar").datepicker("option", "minDate", date);
+                $("#suspendDatePickerCar").datepicker("option", "maxDate", limit);
+
+                $('#suspendDatePickerCar').val('');
+                abilitaReportCar();
+            },
+            
+        }).on('input', function(e){abilitaReportCar()});
+
+        $("#suspendDatePickerCar").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            multidate: true,
+            onSelect: function (selected) {
+                abilitaReportCar();
+            }
+
+        }).on('input', function(e){abilitaReportCar()});
+
+        function inizializzaDatePicker(){
+            $("#suspstartDatePickerCar").datepicker('setDate', new Date());
+            $("#suspstartDatePickerCar").prop('disabled', true);
+
+            var date = $("#suspstartDatePickerCar").datepicker('getDate');
+            var limit = $("#suspstartDatePickerCar").datepicker('getDate');
+
+            date.setDate(date.getDate() + 0); // The End date must be 0 days after the start date
+            limit.setDate(limit.getDate() + 6); // The End date can only be maximum 6 days from today
+
+            $("#suspendDatePickerCar").datepicker("option", "minDate", date);
+            $("#suspendDatePickerCar").datepicker("option", "maxDate", limit);
+
+            $('#suspendDatePickerCar').val('');
+            abilitaReportCar();
+
+        }
+
+        inizializzaDatePicker();
+
+        $('#end-time').on('input', function() {
+            abilitaReportCar();
+            console.log("click:"+$('#end-time').val());
+        });
+
+
+
+
+
+        /* APPROVVIGIONAMENTO */
+        $("#suspstartDatePickerApp").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            minDate: '0', //fin quando indietro
+
+            onSelect: function (selected) {
+                var date = $(this).datepicker('getDate');
+                var limit = $(this).datepicker('getDate');
+
+                date.setDate(date.getDate() + 0); // The End date must be 0 days after the start date
+                limit.setDate(limit.getDate() + 6); // The End date can only be maximum 6 days from today
+
+                $("#suspendDatePickerApp").datepicker("option", "minDate", date);
+                $("#suspendDatePickerApp").datepicker("option", "maxDate", limit);
+
+                $('#suspendDatePickerApp').val('');
+                abilitaReportApp();
+            },
+            
+        }).on('input', function(e){abilitaReportApp()});
+
+        $("#suspendDatePickerApp").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            multidate: true,
+            onSelect: function (selected) {
+                abilitaReportApp();
+            }
+
+        }).on('input', function(e){abilitaReportApp()});
+
+
+        
+
+
+        /* AMMINISTRATIVA */
         $("#suspstartDatePicker").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
@@ -60,42 +170,101 @@
 
 
 
-        function abilitaReport(){
-            if ($('#suspstartDatePicker').datepicker('getDate') != null && $('#suspendDatePicker').datepicker('getDate') != null){
+        function abilitaReportCar(){
+            if ($('#suspstartDatePickerCar').datepicker('getDate') != null && $('#suspendDatePickerCar').datepicker('getDate') != null && $('#end-time').val()!=""){
                 $('#report01').prop('disabled', false);
-                $('#report02').prop('disabled', false);
-                $('#report03').prop('disabled', false);
             }else{
                 $('#report01').prop('disabled', true);
+            }
+
+        }
+        abilitaReportCar();
+
+
+        function abilitaReportApp(){
+            if ($('#suspstartDatePickerApp').datepicker('getDate') != null && $('#suspendDatePickerApp').datepicker('getDate') != null){
+                $('#report02').prop('disabled', false);
+            }else{
                 $('#report02').prop('disabled', true);
+            }
+
+        }
+        abilitaReportApp();
+
+
+        function abilitaReport(){
+            if ($('#suspstartDatePicker').datepicker('getDate') != null && $('#suspendDatePicker').datepicker('getDate') != null){
+                $('#report03').prop('disabled', false);
+            }else{
                 $('#report03').prop('disabled', true);
             }
 
         }
-
         abilitaReport();
     
 
     }); 
 
+    //carrello,farmacia,pazienti
     function generaReportSomministrazione(funzionePassata){
 
-        if ($('#suspstartDatePicker').datepicker('getDate') == null || $('#suspendDatePicker').datepicker('getDate') == null){
-            console.log("Valori date nulle");
-            return;
+        if (funzionePassata==='carrello'){
+            console.log(funzionePassata);
+
+            if ($('#suspstartDatePickerCar').datepicker('getDate') == null || $('#suspendDatePickerCar').datepicker('getDate') == null){
+                console.log("Valori date nulle");
+                return;
+            }
+
+            console.log("Invocata generaReportSomministrazione con funzione:"+funzionePassata);
+            var date_suspstartDatePicker = $('#suspstartDatePickerCar').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+            console.log(date_suspstartDatePicker);
+            var date_suspendDatePicker = $('#suspendDatePickerCar').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+            console.log(date_suspendDatePicker);
+            var time_suspendDatePicker = $('#end-time').val();
+            console.log(time_suspendDatePicker);
+            location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&timeFinale='+time_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>');
+            
         }
 
-        //window.location.href='/wardreport/?idUser=<%= idUser %>&unitCode=<%= unitCode %>'
-        console.log("Invocata generaReportSomministrazione con funzione:"+funzionePassata);
-        var date_suspstartDatePicker = $('#suspstartDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
-        console.log(date_suspstartDatePicker);
-        var date_suspendDatePicker = $('#suspendDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
-        console.log(date_suspendDatePicker);
-        //window.open('/wardreport/?funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>', '_blank');
-        //window.open('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=p4cdoctor&unitCode=PSD_PSD_071', '_blank');
-        //location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=p4cdoctor&unitCode=PSD_PSD_071');
-        location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>');
+        
+        if (funzionePassata==='farmacia'){
+            console.log(funzionePassata);
+            
+            if ($('#suspstartDatePickerApp').datepicker('getDate') == null || $('#suspendDatePickerApp').datepicker('getDate') == null){
+                console.log("Valori date nulle");
+                return;
+            }
 
+            console.log("Invocata generaReportSomministrazione con funzione:"+funzionePassata);
+            var date_suspstartDatePicker = $('#suspstartDatePickerApp').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+            console.log(date_suspstartDatePicker);
+            var date_suspendDatePicker = $('#suspendDatePickerApp').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+            console.log(date_suspendDatePicker);
+            //location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>');
+            
+        }
+
+
+        if (funzionePassata==='pazienti'){
+            console.log(funzionePassata);
+
+            if ($('#suspstartDatePicker').datepicker('getDate') == null || $('#suspendDatePicker').datepicker('getDate') == null){
+                console.log("Valori date nulle");
+                return;
+            }
+
+            console.log("Invocata generaReportSomministrazione con funzione:"+funzionePassata);
+            var date_suspstartDatePicker = $('#suspstartDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+            console.log(date_suspstartDatePicker);
+            var date_suspendDatePicker = $('#suspendDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+            console.log(date_suspendDatePicker);
+            //location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>');
+            
+        }
+
+
+        
 
     }
 </script>
@@ -109,14 +278,6 @@
         </button>
     </div>
 
-    <label for="suspstartDatePicker">Data inizio</label>
-    <input type="text" id="suspstartDatePicker" name="suspendfrom" class="form-control-lg" placeholder="Inizio" readonly>
-
-    <label for="suspendDatePicker">Data Fine</label>
-    <input type="text" id="suspendDatePicker" name="suspendto" class="form-control-lg" placeholder="Fine" readonly>
-
-     <br/><br/>
-
      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
         <div class="col">
           <div class="card mb-4 rounded-3 shadow-sm">
@@ -125,6 +286,18 @@
             </div>
             <div class="card-body">
                 <p>Totale quantità prescritta, arrotondata per eccesso all'intero della singola somministrazione.</p>
+                <div class="dataeora">
+                      
+                    <label for="suspstartDatePickerCar" class="nascondi">Data inizio</label>
+                    <input type="text" id="suspstartDatePickerCar" name="suspendfrom" class="form-control-lg nascondi" placeholder="Inizio" readonly>
+
+                    <label for="suspendDatePickerCar">Data Fine</label>
+                    <input type="text" id="suspendDatePickerCar" name="suspendto" class="form-control-lg" placeholder="Fine" readonly>
+
+                    <label for="end-time">Ora fine</label>
+                    <input type="time" id="end-time" name="end-time" class="form-control-lg" value="23:59">
+                                        
+                </div>
                 <button type="button" id="report01" onclick="generaReportSomministrazione('carrello')" class="w-100 btn btn-lg btn-outline-primary">Genera report</button>
             </div>
           </div>
@@ -136,6 +309,13 @@
             </div>
             <div class="card-body">
                 <p>Totale quantità prescritta, arrotondata per eccesso all'intero di ogni prescrizione.</p>
+                <div class="dataeora">
+                    <label for="suspstartDatePickerApp">Data inizio</label>
+                    <input type="text" id="suspstartDatePickerApp" name="suspendfrom" class="form-control-lg" placeholder="Inizio" readonly>
+
+                    <label for="suspendDatePickerApp">Data Fine</label>
+                    <input type="text" id="suspendDatePickerApp" name="suspendto" class="form-control-lg" placeholder="Fine" readonly>
+                </div>
                 <button type="button" id="report02" onclick="generaReportSomministrazione('farmacia')" class="w-100 btn btn-lg btn-outline-primary">Genera report</button>
             </div>
           </div>
@@ -147,6 +327,13 @@
             </div>
             <div class="card-body">
                 <p>Estrazione dei farmaci prescritti e somministrati, su base almeno settimanale.</p>
+                <div class="dataeora">
+                    <label for="suspstartDatePicker">Data inizio</label>
+                    <input type="text" id="suspstartDatePicker" name="suspendfrom" class="form-control-lg" placeholder="Inizio" readonly>
+
+                    <label for="suspendDatePicker">Data Fine</label>
+                    <input type="text" id="suspendDatePicker" name="suspendto" class="form-control-lg" placeholder="Fine" readonly>
+                </div>
                 <button type="button" id="report03" onclick="generaReportSomministrazione('pazienti')" class="w-100 btn btn-lg btn-outline-primary">Genera report</button>
             </div>
           </div>
