@@ -380,7 +380,7 @@ async function generaReportReparto(dati,res) {
           CASE WHEN (NVL(descrizione_farmacto_somministrato,'')) is NULL then ' ' ELSE TO_CHAR(NVL(descrizione_farmacto_somministrato,'')) END descrizione_farmacto_somministrato,
           CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
           CASE WHEN (NVL(quantita,'')) is NULL then ' ' ELSE TO_CHAR(NVL(quantita,'')) END quantita,
-          CASE WHEN (NVL(sum(qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL(sum(qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata,
+          CASE WHEN (NVL((qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL((qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata,
           to_char(stato) stato,
           to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
           CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
