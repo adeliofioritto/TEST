@@ -503,6 +503,8 @@ async function generaReportReparto(dati,res) {
         worksheetPAZ.cell(riga,10).string('FORMA_FARMACEUTICA_PRESCRITTA').style(stylePAZ);
         worksheetPAZ.cell(riga,11).string('ATC_CODE').style(stylePAZ);        
         worksheetPAZ.cell(riga,12).string('QTY_ARROTONDATA').style(stylePAZ);
+        worksheetPAZ.cell(riga,13).string('IN_PRONTUARIO').style(stylePAZ);
+        
 
         riga++;
 
@@ -523,6 +525,7 @@ async function generaReportReparto(dati,res) {
           worksheetPAZ.cell(riga,10).string(row2.FORMA_FARMACEUTICA_PRESCRITTA).style(stylePAZ);
           worksheetPAZ.cell(riga,11).string(row2.ATC_CODE).style(stylePAZ);
           worksheetPAZ.cell(riga,12).string(row2.QTY_ARROTONDATA).style(stylePAZ);
+          worksheetPAZ.cell(riga,13).string(row2.IN_PRONTUARIO).style(stylePAZ);
 
           riga++;
         }
@@ -580,6 +583,7 @@ async function generaReportReparto(dati,res) {
       worksheetPAZ.cell(riga,12).string('FORMA_FARMACEUTICA_PRESCRITTA').style(stylePAZ);
       worksheetPAZ.cell(riga,13).string('ATC_CODE').style(stylePAZ);        
       worksheetPAZ.cell(riga,14).string('QTY_ARROTONDATA').style(stylePAZ);
+      worksheetPAZ.cell(riga,15).string('IN_PRONTUARIO').style(stylePAZ);
 
       riga++;
 
@@ -602,6 +606,7 @@ async function generaReportReparto(dati,res) {
         worksheetPAZ.cell(riga,12).string(row3.FORMA_FARMACEUTICA_PRESCRITTA).style(stylePAZ);
         worksheetPAZ.cell(riga,13).string(row3.ATC_CODE).style(stylePAZ);
         worksheetPAZ.cell(riga,14).string(row3.QTY_ARROTONDATA).style(stylePAZ);
+        worksheetPAZ.cell(riga,15).string(row3.IN_PRONTUARIO).style(stylePAZ);
 
         riga++;
       }
