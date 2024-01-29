@@ -384,7 +384,8 @@ async function generaReportReparto(dati,res) {
           to_char(stato) stato,
           to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
           CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
-          to_char(route_desc) route_desc
+          to_char(route_desc) route_desc,
+          decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale,codice_reparto_giuridico),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario
       FROM
           V_SOMM_PAZ_WARD WHERE data_inizio_somministrazione_pianificata between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+`','DD/MM/YYYY') + (86399/86400) and (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')`,
           [],
@@ -419,6 +420,7 @@ async function generaReportReparto(dati,res) {
       worksheetPAZ.cell(riga,22).string('DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA').style(stylePAZ);
       worksheetPAZ.cell(riga,23).string('DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA').style(stylePAZ);
       worksheetPAZ.cell(riga,24).string('ROUTE_DESC').style(stylePAZ);
+      worksheetPAZ.cell(riga,25).string('IN_PRONTUARIO').style(stylePAZ);
 
       riga++;
 
@@ -451,6 +453,7 @@ async function generaReportReparto(dati,res) {
         worksheetPAZ.cell(riga,22).string(row.DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA).style(stylePAZ);
         worksheetPAZ.cell(riga,23).string(row.DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA).style(stylePAZ);
         worksheetPAZ.cell(riga,24).string(row.ROUTE_DESC).style(stylePAZ);
+        worksheetPAZ.cell(riga,25).string(row.IN_PRONTUARIO).style(stylePAZ);
         riga++;
       }
   
