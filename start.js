@@ -616,6 +616,7 @@ async function generaReportReparto(dati,res) {
   
   
       if (dati.funzione === 'farmacia'){
+        var worksheetPAZbisogno = workbookPAZ.addWorksheet('AL_BISOGNO');
     
           result3 = await connection.execute(
             `select t.*, decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale,codice_reparto_giuridico),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario from (
@@ -689,9 +690,88 @@ async function generaReportReparto(dati,res) {
         riga++;
       }
 
+
+      /* Per le prescrizioni al bisogno */
+      result5 = await connection.execute(
+        `select t.*, decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario from (
+          WITH appoggio as (
+            select * from v_somm_presc_ward_req
+            ) 
+            select 
+              struttura,
+              CASE WHEN (NVL(codice_reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(codice_reparto_assistenziale,'')) END codice_reparto_assistenziale,
+              CASE WHEN (NVL(reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(reparto_assistenziale,'')) END reparto_assistenziale,
+              codice_reparto_giuridico,
+              reparto_giuridico,
+              codice_farmaco_prescritto,
+              descrizione_farmacto_prescritto,
+              sostituibilita,
+              CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
+              CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,                
+              atc_code, 
+              CASE WHEN (NVL(sum(qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL(sum(qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata
+              from appoggio 
+            where 
+            (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')
+            group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_reparto_giuridico,reparto_giuridico,codice_farmaco_prescritto,descrizione_farmacto_prescritto,sostituibilita,unita_di_misura,forma_farmaceutica_prescritta,atc_code
+            order by descrizione_farmacto_prescritto) t`,
+        [],
+        { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
+
+
+      const rs5 = result5.resultSet;
+      let row5;
+      riga = 1;
+
+      worksheetPAZbisogno.cell(riga,1).string('DA').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,2).string('A').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,3).string('STRUTTURA').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,4).string('CODICE_REPARTO_ASSISTENZIALE').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,5).string('REPARTO_ASSISTENZIALE').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,6).string('CODICE_REPARTO_GIURIDICO').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,7).string('REPARTO_GIURIDICO').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,8).string('CODICE_FARMACO_PRESCRITTO').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,9).string('DESCRIZIONE_FARMACTO_PRESCRITTO').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,10).string('SOSTITUIBILITA').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,11).string('UNITA_DI_MISURA').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,12).string('FORMA_FARMACEUTICA_PRESCRITTA').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,13).string('ATC_CODE').style(stylePAZ);        
+      worksheetPAZbisogno.cell(riga,14).string('QTY_ARROTONDATA').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,15).string('IN_PRONTUARIO').style(stylePAZ);
+      
+
+      riga++;
+
+
+      while ((row5 = await rs5.getRow())) {
+        console.log(riga);  
+        //console.log(row);
+        //console.log(row.ISTITUTO);
+        worksheetPAZbisogno.cell(riga,1).string(dati.dataIniziale).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,2).string(dati.dataFinale).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,3).string(row5.STRUTTURA).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,4).string(row5.CODICE_REPARTO_ASSISTENZIALE).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,5).string(row5.REPARTO_ASSISTENZIALE).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,6).string(row5.CODICE_REPARTO_GIURIDICO).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,7).string(row5.REPARTO_GIURIDICO).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,8).string(row5.CODICE_FARMACO_PRESCRITTO).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,9).string(row5.DESCRIZIONE_FARMACTO_PRESCRITTO).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,10).string(row5.SOSTITUIBILITA).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,11).string(row5.UNITA_DI_MISURA).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,12).string(row5.FORMA_FARMACEUTICA_PRESCRITTA).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,13).string(row5.ATC_CODE).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,14).string(row5.QTY_ARROTONDATA).style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,15).string(row5.IN_PRONTUARIO).style(stylePAZ);
+
+        riga++;
+      }
+      /* FINE prescrizionia al bisogno */
+
+
       //workbook.write('statistiche.xlsx', res);
       workbookPAZ.write(dati.funzione+" "+dati.unitCode+" "+ date + "-" + month + "-" + year+" ore " + hour+"-" + minutes+".xlsx", res);
       await rs3.close();
+      await rs5.close();
 
     }
   
