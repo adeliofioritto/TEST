@@ -586,7 +586,7 @@ async function generaReportReparto(dati,res) {
 
 
         while ((row4 = await rs4.getRow())) {
-          console.log(riga);  
+          //console.log(riga);  
           //console.log(row);
           //console.log(row.ISTITUTO);
           worksheetPAZbisogno.cell(riga,1).string(dati.dataIniziale).style(stylePAZ);
@@ -744,7 +744,7 @@ async function generaReportReparto(dati,res) {
 
 
       while ((row5 = await rs5.getRow())) {
-        console.log(riga);  
+        //console.log(riga);  
         //console.log(row);
         //console.log(row.ISTITUTO);
         worksheetPAZbisogno.cell(riga,1).string(dati.dataIniziale).style(stylePAZ);
