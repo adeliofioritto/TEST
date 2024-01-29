@@ -420,8 +420,6 @@ async function generaReportReparto(dati,res) {
       worksheetPAZ.cell(riga,23).string('DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA').style(stylePAZ);
       worksheetPAZ.cell(riga,24).string('ROUTE_DESC').style(stylePAZ);
 
-
-
       riga++;
 
 
@@ -442,10 +440,10 @@ async function generaReportReparto(dati,res) {
         worksheetPAZ.cell(riga,11).string(row.DATA_FINE_PRESCRIZIONE).style(stylePAZ);
         worksheetPAZ.cell(riga,12).string(row.CODICE_FARMACO_PRESCRITTO).style(stylePAZ);
         worksheetPAZ.cell(riga,13).string(row.DESCRIZIONE_FARMACTO_PRESCRITTO).style(stylePAZ);
-        worksheetPAZ.cell(riga,14).string(row.FORMA_FARMACEUTICA_PRESCRITTA).style(stylePAZ);
-        worksheetPAZ.cell(riga,15).string(row.CODICE_FARMACO_SOMMINISTRATO).style(stylePAZ);
-        worksheetPAZ.cell(riga,16).string(row.DESCRIZIONE_FARMACTO_SOMMINISTRATO).style(stylePAZ);
-        worksheetPAZ.cell(riga,17).string(row.SOSTITUIBILITA).style(stylePAZ);
+        worksheetPAZ.cell(riga,14).string(row.SOSTITUIBILITA).style(stylePAZ);
+        worksheetPAZ.cell(riga,15).string(row.FORMA_FARMACEUTICA_PRESCRITTA).style(stylePAZ);
+        worksheetPAZ.cell(riga,16).string(row.CODICE_FARMACO_SOMMINISTRATO).style(stylePAZ);
+        worksheetPAZ.cell(riga,17).string(row.DESCRIZIONE_FARMACTO_SOMMINISTRATO).style(stylePAZ);
         worksheetPAZ.cell(riga,18).string(row.UNITA_DI_MISURA).style(stylePAZ);
         worksheetPAZ.cell(riga,19).string(row.QUANTITA).style(stylePAZ);
         worksheetPAZ.cell(riga,20).string(row.QTY_ARROTONDATA).style(stylePAZ);
