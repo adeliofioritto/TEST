@@ -317,9 +317,11 @@ async function generaReportTerapia(reparto,res) {
 
 async function generaReportReparto(dati,res) {
 
-  var workbook = new excel.Workbook();
-  var workbookPAZ = new excel.Workbook();
-  var worksheetPAZ = workbookPAZ.addWorksheet('FARMACI_PAZIENTE');
+  var workbook =            new excel.Workbook();
+  var workbookPAZ =         new excel.Workbook();
+  var worksheetPAZ =        workbookPAZ.addWorksheet('FARMACI_PAZIENTE');
+  var worksheetPAZbisogno = workbookPAZ.addWorksheet('AL_BISOGNO');
+
   var style = workbook.createStyle({font: {color: '#000000',size: 10}});
   var stylePAZ = workbookPAZ.createStyle({font: {color: '#000000',size: 10}});
   
