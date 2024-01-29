@@ -597,7 +597,7 @@ async function generaReportReparto(dati,res) {
         worksheetPAZ.cell(riga,7).string(row3.REPARTO_GIURIDICO).style(stylePAZ);
         worksheetPAZ.cell(riga,8).string(row3.CODICE_FARMACO_PRESCRITTO).style(stylePAZ);
         worksheetPAZ.cell(riga,9).string(row3.DESCRIZIONE_FARMACTO_PRESCRITTO).style(stylePAZ);
-        worksheetPAZ.cell(riga,9).string(row3.SOSTITUIBILITA).style(stylePAZ);
+        worksheetPAZ.cell(riga,10).string(row3.SOSTITUIBILITA).style(stylePAZ);
         worksheetPAZ.cell(riga,11).string(row3.UNITA_DI_MISURA).style(stylePAZ);
         worksheetPAZ.cell(riga,12).string(row3.FORMA_FARMACEUTICA_PRESCRITTA).style(stylePAZ);
         worksheetPAZ.cell(riga,13).string(row3.ATC_CODE).style(stylePAZ);
