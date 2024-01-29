@@ -464,7 +464,8 @@ async function generaReportReparto(dati,res) {
 
       if (dati.funzione === 'carrello'){
         result2 = await connection.execute(
-          `WITH appoggio as (
+          `select t.*, decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario from (
+            WITH appoggio as (
             select * from v_somm_presc_ward
             ) 
             select 
@@ -481,7 +482,7 @@ async function generaReportReparto(dati,res) {
               from appoggio 
             where appoggio.planned_start between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+` `+dati.timeFinale+`','DD/MM/YYYY HH24:MI') and (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')
             group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_farmaco_prescritto,descrizione_farmacto_prescritto,sostituibilita,unita_di_misura,forma_farmaceutica_prescritta,atc_code
-            order by descrizione_farmacto_prescritto`,
+            order by descrizione_farmacto_prescritto) t`,
           [],
           { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
 
@@ -536,7 +537,8 @@ async function generaReportReparto(dati,res) {
       if (dati.funzione === 'farmacia'){
     
           result3 = await connection.execute(
-            `WITH appoggio as (
+            `select t.*, decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale,codice_reparto_giuridico),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario from (
+              WITH appoggio as (
               select * from v_somm_presc_ward
               ) 
               select 
@@ -555,7 +557,7 @@ async function generaReportReparto(dati,res) {
                 from appoggio 
               where appoggio.planned_start between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+`','DD/MM/YYYY') + (86399/86400) and (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')
               group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_reparto_giuridico,reparto_giuridico,codice_farmaco_prescritto,descrizione_farmacto_prescritto,sostituibilita,unita_di_misura,forma_farmaceutica_prescritta,atc_code
-              order by descrizione_farmacto_prescritto`,
+              order by descrizione_farmacto_prescritto) t`,
             [],
             { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
 
