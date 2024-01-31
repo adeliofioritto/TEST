@@ -605,8 +605,7 @@ async function generaReportReparto(dati,res) {
                 CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,                
                 atc_code 
                 from appoggio 
-              where 
-              (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')
+              where nome_stanza in (`+dati.listaLetti+`) and (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')
               group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_farmaco_prescritto,descrizione_farmacto_prescritto,sostituibilita,forma_farmaceutica_prescritta,atc_code
               order by descrizione_farmacto_prescritto) t`,
           [],
