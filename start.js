@@ -260,7 +260,7 @@ async function generaReportTerapia(reparto,res) {
       /* Modificata in data 27/11/2023, eliminati codici reparti ass e giu, filtro solo per COMPLETED */
       result = await connection.execute(
         `SELECT
-        CASE WHEN (NVL(tipo_fornitura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(tipo_fornitura,'')) END unita_di_misura,
+        CASE WHEN (NVL(tipo_fornitura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(tipo_fornitura,'')) END tipo_fornitura,
         to_char(struttura) struttura,
         to_char(reparto_assistenziale) reparto_assistenziale,
         to_char(reparto_giuridico) reparto_giuridico,
