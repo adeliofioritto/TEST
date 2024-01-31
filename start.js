@@ -518,6 +518,7 @@ async function generaReportReparto(dati,res) {
 
       if (dati.funzione === 'carrello'){
         console.log("dati.listaLetti:"+dati.listaLetti);
+        console.log("dati.timeFinale:"+dati.timeFinale);
         var worksheetPAZbisogno = workbookPAZ.addWorksheet('AL_BISOGNO');
 
         result2 = await connection.execute(
