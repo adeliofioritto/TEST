@@ -260,6 +260,7 @@ async function generaReportTerapia(reparto,res) {
       /* Modificata in data 27/11/2023, eliminati codici reparti ass e giu, filtro solo per COMPLETED */
       result = await connection.execute(
         `SELECT
+        CASE WHEN (NVL(tipo_fornitura,'')) is NULL then ' ' ELSE tipo_fornitura END unita_di_misura,
         to_char(struttura) struttura,
         to_char(reparto_assistenziale) reparto_assistenziale,
         to_char(reparto_giuridico) reparto_giuridico,
@@ -305,7 +306,8 @@ async function generaReportTerapia(reparto,res) {
         worksheetPAZ.cell(riga,16).string('DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA').style(stylePAZ);
         worksheetPAZ.cell(riga,17).string('DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA').style(stylePAZ);
         worksheetPAZ.cell(riga,18).string('ROUTE_DESC').style(stylePAZ);
- 
+        worksheetPAZ.cell(riga,19).string('TIPO_FORNITURA').style(stylePAZ);
+
   
   
         riga++;
@@ -333,6 +335,7 @@ async function generaReportTerapia(reparto,res) {
           worksheetPAZ.cell(riga,16).string(row.DATA_INIZIO_SOMMINISTRAZIONE_PIANIFICATA).style(stylePAZ);
           worksheetPAZ.cell(riga,17).string(row.DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA).style(stylePAZ);
           worksheetPAZ.cell(riga,18).string(row.ROUTE_DESC).style(stylePAZ);
+          worksheetPAZ.cell(riga,19).string(row.TIPO_FORNITURA).style(stylePAZ);
           riga++;
         }
   
