@@ -287,7 +287,6 @@ async function generaReportTerapia(reparto,res) {
         const rs = result.resultSet;
         let row;
         let riga = 1;
-  
         worksheetPAZ.cell(riga,1).string('STRUTTURA').style(stylePAZ);
         worksheetPAZ.cell(riga,2).string('REPARTO_ASSISTENZIALE').style(stylePAZ);
         worksheetPAZ.cell(riga,3).string('REPARTO_GIURIDICO').style(stylePAZ);
@@ -315,7 +314,7 @@ async function generaReportTerapia(reparto,res) {
   
         while ((row = await rs.getRow())) {
           //console.log(riga);  
-          //console.log(row);
+          console.log(row);
           //console.log(row.ISTITUTO);
           worksheetPAZ.cell(riga,1).string(row.STRUTTURA).style(stylePAZ);
           worksheetPAZ.cell(riga,2).string(row.REPARTO_ASSISTENZIALE).style(stylePAZ);
