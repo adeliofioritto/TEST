@@ -447,8 +447,8 @@ async function generaReportReparto(dati,res) {
       let row;
       let riga = 1;
 
-      worksheetPAZ.cell(riga,1).string('PERIODO DA').style(stylePAZ);
-      worksheetPAZ.cell(riga,2).string('PERIODO AL').style(stylePAZ);
+      worksheetPAZ.cell(riga,1).string('PERIODO_DA').style(stylePAZ);
+      worksheetPAZ.cell(riga,2).string('PERIODO_AL').style(stylePAZ);
       worksheetPAZ.cell(riga,3).string('STRUTTURA').style(stylePAZ);
       worksheetPAZ.cell(riga,4).string('CODICE_REPARTO_ASSISTENZIALE').style(stylePAZ);
       worksheetPAZ.cell(riga,5).string('REPARTO_ASSISTENZIALE').style(stylePAZ);
@@ -535,11 +535,11 @@ async function generaReportReparto(dati,res) {
               sostituibilita,
               CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
               CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,                
-              atc_code 
+              atc_code, 
               CASE WHEN (NVL(sum(qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL(sum(qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata
               from appoggio 
             where nome_stanza in (`+dati.listaLetti+`) and appoggio.planned_start between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+` `+dati.timeFinale+`','DD/MM/YYYY HH24:MI') and (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')
-            group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_farmaco_prescritto,descrizione_farmacto_prescritto,sostituibilita,unita_di_misura,forma_farmaceutica_prescritta,atc_code
+            group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_farmaco_prescritto,descrizione_farmacto_prescritto,sostituibilita,unita_di_misura,forma_farmaceutica_prescritta,atc_code 
             order by descrizione_farmacto_prescritto) t`,
           [],
           { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
@@ -549,8 +549,8 @@ async function generaReportReparto(dati,res) {
         let row2;
         let riga = 1;
 
-        worksheetPAZ.cell(riga,1).string('PERIODO DA').style(stylePAZ);
-        worksheetPAZ.cell(riga,2).string('PERIODO AL').style(stylePAZ);
+        worksheetPAZ.cell(riga,1).string('PERIODO_DA').style(stylePAZ);
+        worksheetPAZ.cell(riga,2).string('PERIODO_AL').style(stylePAZ);
         worksheetPAZ.cell(riga,3).string('STRUTTURA').style(stylePAZ);
         worksheetPAZ.cell(riga,4).string('CODICE_REPARTO_ASSISTENZIALE').style(stylePAZ);
         worksheetPAZ.cell(riga,5).string('REPARTO_ASSISTENZIALE').style(stylePAZ);
@@ -617,8 +617,8 @@ async function generaReportReparto(dati,res) {
         let row4;
         riga = 1;
 
-        worksheetPAZbisogno.cell(riga,1).string('PERIODO DA').style(stylePAZ);
-        worksheetPAZbisogno.cell(riga,2).string('PERIODO AL').style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,1).string('PERIODO_DA').style(stylePAZ);
+        worksheetPAZbisogno.cell(riga,2).string('PERIODO_AL').style(stylePAZ);
         worksheetPAZbisogno.cell(riga,3).string('STRUTTURA').style(stylePAZ);
         worksheetPAZbisogno.cell(riga,4).string('CODICE_REPARTO_ASSISTENZIALE').style(stylePAZ);
         worksheetPAZbisogno.cell(riga,5).string('REPARTO_ASSISTENZIALE').style(stylePAZ);
@@ -680,7 +680,7 @@ async function generaReportReparto(dati,res) {
                 descrizione_farmacto_prescritto,
                 CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
                 CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,                
-                atc_code 
+                atc_code, 
                 CASE WHEN (NVL(sum(qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL(sum(qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata
                 from appoggio 
               where appoggio.planned_start between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+`','DD/MM/YYYY') + (86399/86400) and (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')
@@ -694,8 +694,8 @@ async function generaReportReparto(dati,res) {
       let row3;
       let riga = 1;
 
-      worksheetPAZ.cell(riga,1).string('PERIODO DA').style(stylePAZ);
-      worksheetPAZ.cell(riga,2).string('PERIODO AL').style(stylePAZ);
+      worksheetPAZ.cell(riga,1).string('PERIODO_DA').style(stylePAZ);
+      worksheetPAZ.cell(riga,2).string('PERIODO_AL').style(stylePAZ);
       worksheetPAZ.cell(riga,3).string('STRUTTURA').style(stylePAZ);
       worksheetPAZ.cell(riga,4).string('CODICE_REPARTO_ASSISTENZIALE').style(stylePAZ);
       worksheetPAZ.cell(riga,5).string('REPARTO_ASSISTENZIALE').style(stylePAZ);
@@ -767,8 +767,8 @@ async function generaReportReparto(dati,res) {
       let row5;
       riga = 1;
 
-      worksheetPAZbisogno.cell(riga,1).string('PERIODO DA').style(stylePAZ);
-      worksheetPAZbisogno.cell(riga,2).string('PERIODO AL').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,1).string('PERIODO_DA').style(stylePAZ);
+      worksheetPAZbisogno.cell(riga,2).string('PERIODO_AL').style(stylePAZ);
       worksheetPAZbisogno.cell(riga,3).string('STRUTTURA').style(stylePAZ);
       worksheetPAZbisogno.cell(riga,4).string('CODICE_REPARTO_ASSISTENZIALE').style(stylePAZ);
       worksheetPAZbisogno.cell(riga,5).string('REPARTO_ASSISTENZIALE').style(stylePAZ);
