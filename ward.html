@@ -37,10 +37,23 @@
         .form-control-lg {
         width: 30%;
         }
+        button:focus {
+        outline: 0;
+        }
+        .active{
+            background-color: #ADD8E6 !important;
+        }
+        .selettoreStanze {
+            background: lightgray;
+            margin: 5px;
+        }
     </style>
 </head>
 <script>
-    $(document).ready(function () {
+    var csvListaLetti;
+
+        $(document).ready(function () {
+        var listaRepartiSelezionati=[];
 
         /* CARRELLO */
         $("#suspstartDatePickerCar").datepicker({
@@ -144,6 +157,7 @@
             dateFormat: 'dd/mm/yy',
             changeMonth: true,
             minDate: '-30', //fin quando indietro
+            maxDate:0,
 
             onSelect: function (selected) {
                 var date = $(this).datepicker('getDate');
@@ -151,9 +165,14 @@
 
                 date.setDate(date.getDate() + 0); // The End date must be 0 days after the start date
                 limit.setDate(limit.getDate() + 6); // The End date can only be maximum 6 days from today
+                oggi = new Date();
 
                 $("#suspendDatePicker").datepicker("option", "minDate", date);
-                $("#suspendDatePicker").datepicker("option", "maxDate", limit);
+                if (oggi < limit) {
+                        $("#suspendDatePicker").datepicker("option", "maxDate", oggi);
+                }else{
+                    $("#suspendDatePicker").datepicker("option", "maxDate", limit);
+                }
 
                 $('#suspendDatePicker').val('');
                 abilitaReport();
@@ -174,7 +193,7 @@
 
 
         function abilitaReportCar(){
-            if ($('#suspstartDatePickerCar').datepicker('getDate') != null && $('#suspendDatePickerCar').datepicker('getDate') != null && $('#end-time').val()!=""){
+            if ($('#suspstartDatePickerCar').datepicker('getDate') != null && $('#suspendDatePickerCar').datepicker('getDate') != null && $('#end-time').val()!="" && listaRepartiSelezionati.length!=0){
                 $('#report01').prop('disabled', false);
             }else{
                 $('#report01').prop('disabled', true);
@@ -206,7 +225,81 @@
         abilitaReport();
     
 
+
+        /* Per la selezione massiva di tutte le stanze */
+        function settaMassivamenteStanze(parametro){
+            console.log("parametro Passato:"+parametro)
+            var buttons = document.querySelectorAll('.selettoreStanze')
+            buttons.forEach(function (button) {
+             //$(button).attr('aria-pressed', 'true');
+             console.log($(button).attr('id'));
+             if ($(button).attr('id')!="stanzeAll"){
+                console.log("parametro:"+parametro);
+                console.log("button:"+$(button).attr('aria-pressed'));
+
+                if ((parametro === "true") && ($(button).attr('aria-pressed')=== 'false' )){
+                    $(button).click();  
+                }
+                if ((parametro === "false") && ($(button).attr('aria-pressed') === 'true' )){
+                    $(button).click();  
+                }
+             }
+                   
+        })
+        }
+
+        var buttons = document.querySelectorAll('.selettoreStanze')
+            buttons.forEach(function (button) {
+            //var button = new bootstrap.Button(button);
+             console.log("dentro")
+             button.addEventListener('click', (e) => {
+                // Do whatever you want
+                
+                //e.target.textContent = 'Clicked!';
+                console.log("dentro addEventListener");
+                console.log(e);
+                if (e.target.id === 'stanzeAll'){
+                    console.log("tutte");
+                    if (e.target.ariaPressed==="true"){
+                        settaMassivamenteStanze("false");
+                    }else{
+                        settaMassivamenteStanze("true");
+                    }
+                }
+                e.target.classList.toggle("active");
+                if (e.target.ariaPressed==="true"){
+                    e.target.ariaPressed = "false"; 
+                    if (e.target.id != 'stanzeAll'){
+                        listaRepartiSelezionati.pop(e.target.id);
+                    }
+                }else{ 
+                    e.target.ariaPressed = "true";
+                    if (e.target.id != 'stanzeAll'){
+                        listaRepartiSelezionati.push(e.target.id);
+                    }
+                }            
+                console.log(e.target.ariaPressed);
+                console.log("listaRepartiSelezionati");
+                console.log(listaRepartiSelezionati);
+                csvListaLetti = listaRepartiSelezionati.map(e => JSON.stringify(e)).join(",");
+                console.log(csvListaLetti);
+                abilitaReportCar();
+            });
+
+                
+        })
+
+         
+         
+
     }); 
+    console.log('listaLetti');
+    var listaLetti = '<%= listaLetti %>';
+    listaLetti = listaLetti.replaceAll('&#34;','');
+    console.log(listaLetti);
+    listaLetti = listaLetti.split(',');
+    console.log(listaLetti);
+
 
     //carrello,farmacia,pazienti
     function generaReportSomministrazione(funzionePassata){
@@ -226,7 +319,8 @@
             console.log(date_suspendDatePicker);
             var time_suspendDatePicker = $('#end-time').val();
             console.log(time_suspendDatePicker);
-            location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&timeFinale='+time_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>');
+            console.log(csvListaLetti);
+            location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&timeFinale='+time_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>&listaLetti='+csvListaLetti);
             
         }
 
@@ -270,6 +364,8 @@
         
 
     }
+
+    
 </script>
 
 <body>
@@ -299,7 +395,19 @@
 
                     <label for="end-time">Ora fine</label>
                     <input type="time" id="end-time" name="end-time" class="form-control-lg" value="23:59">
-                                        
+ 
+
+
+                <div class="elencoStanze">
+                    <button id="stanzeAll" type="button" class="btn selettoreStanze" data-bs-toggle="button" autocomplete="off" aria-pressed="false">Seleziona tutte le stanze</button><br/>
+                    <script type="application/javascript">
+                        for (const element of listaLetti) {
+                            console.log(element);                            
+                            document.write('<button id="'+element+'" type="button" class="btn selettoreStanze" data-bs-toggle="button" autocomplete="off" aria-pressed="false">'+element+'</button>');
+                        }
+                    </script>
+
+                </div>
                 </div>
                 <button type="button" id="report01" onclick="generaReportSomministrazione('carrello')" class="w-100 btn btn-lg btn-outline-primary">Genera report</button>
             </div>
