@@ -338,7 +338,7 @@
             console.log(date_suspstartDatePicker);
             var date_suspendDatePicker = $('#suspendDatePickerApp').datepicker({ dateFormat: 'yy-mm-dd' }).val();
             console.log(date_suspendDatePicker);
-            location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>');
+            location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>&listaLetti='+csvListaLetti);
             
         }
 
@@ -356,7 +356,7 @@
             console.log(date_suspstartDatePicker);
             var date_suspendDatePicker = $('#suspendDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
             console.log(date_suspendDatePicker);
-            location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>');
+            location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>&listaLetti='+csvListaLetti);
             
         }
 
