@@ -279,6 +279,7 @@ async function generaReportTerapia(reparto,res) {
         to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
         CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
         to_char(route_desc) route_desc,
+        CASE WHEN (NVL(sum_num_strength_val,'')) is NULL then ' ' ELSE TO_CHAR(NVL(sum_num_strength_val,'')) END tot_pa,
         CASE WHEN (NVL(CODE_UOM,'')) is NULL then ' ' ELSE TO_CHAR(NVL(CODE_UOM,'')) END unita_riferimento_pa,
         CASE WHEN (NVL(DESCRIZIONE_ESTESA_CONTENITORE,'')) is NULL then ' ' ELSE TO_CHAR(NVL(DESCRIZIONE_ESTESA_CONTENITORE,'')) END DESCRIZIONE_ESTESA_CONTENITORE,
         CASE WHEN (NVL(DESCRIZIONE_FORMA_FARMACEUTICA,'')) is NULL then ' ' ELSE TO_CHAR(NVL(DESCRIZIONE_FORMA_FARMACEUTICA,'')) END DESCRIZIONE_FORMA_FARMACEUTICA
@@ -310,9 +311,10 @@ async function generaReportTerapia(reparto,res) {
         worksheetPAZ.cell(riga,17).string('DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA').style(stylePAZ);
         worksheetPAZ.cell(riga,18).string('ROUTE_DESC').style(stylePAZ);
         worksheetPAZ.cell(riga,19).string('TIPO_FORNITURA').style(stylePAZ);
-        worksheetPAZ.cell(riga,20).string('UNITA_RIFERIMENTO_PA').style(stylePAZ);
-        worksheetPAZ.cell(riga,21).string('DESCRIZIONE_ESTESA_CONTENITORE').style(stylePAZ);
-        worksheetPAZ.cell(riga,22).string('DESCRIZIONE_FORMA_FARMACEUTICA').style(stylePAZ);
+        worksheetPAZ.cell(riga,20).string('TOT_PA').style(stylePAZ);
+        worksheetPAZ.cell(riga,21).string('UNITA_RIFERIMENTO_PA').style(stylePAZ);
+        worksheetPAZ.cell(riga,22).string('DESCRIZIONE_ESTESA_CONTENITORE').style(stylePAZ);
+        worksheetPAZ.cell(riga,23).string('DESCRIZIONE_FORMA_FARMACEUTICA').style(stylePAZ);
 
   
   
@@ -342,9 +344,10 @@ async function generaReportTerapia(reparto,res) {
           worksheetPAZ.cell(riga,17).string(row.DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA).style(stylePAZ);
           worksheetPAZ.cell(riga,18).string(row.ROUTE_DESC).style(stylePAZ);
           worksheetPAZ.cell(riga,19).string(row.TIPO_FORNITURA).style(stylePAZ);
-          worksheetPAZ.cell(riga,20).string(row.UNITA_RIFERIMENTO_PA).style(stylePAZ);
-          worksheetPAZ.cell(riga,21).string(row.DESCRIZIONE_ESTESA_CONTENITORE).style(stylePAZ);
-          worksheetPAZ.cell(riga,22).string(row.DESCRIZIONE_FORMA_FARMACEUTICA).style(stylePAZ);
+          worksheetPAZ.cell(riga,20).string(row.TOT_PA).style(stylePAZ);
+          worksheetPAZ.cell(riga,21).string(row.UNITA_RIFERIMENTO_PA).style(stylePAZ);
+          worksheetPAZ.cell(riga,22).string(row.DESCRIZIONE_ESTESA_CONTENITORE).style(stylePAZ);
+          worksheetPAZ.cell(riga,23).string(row.DESCRIZIONE_FORMA_FARMACEUTICA).style(stylePAZ);
           riga++;
         }
   
