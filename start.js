@@ -278,9 +278,13 @@ async function generaReportTerapia(reparto,res) {
         to_char(stato) stato,
         to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
         CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
-        to_char(route_desc) route_desc
+        to_char(route_desc) route_desc,
+        CODE_UOM unita_riferimento,
+        DESCRIZIONE_ESTESA_CONTENITORE,
+        DESCRIZIONE_FORMA_FARMACEUTICA
       FROM
-        v_somm_paz_nos_v2 WHERE extension = '`+reparto+`'`,
+      v_somm_paz_nos_v2 v left join V_FARMACI_CONTENITORI_UOM CFC on v.codice_farmaco_somministrato = cfc.amp_code
+      WHERE extension = '`+reparto+`'`,
         [],
         { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });    
     
