@@ -279,9 +279,9 @@ async function generaReportTerapia(reparto,res) {
         to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
         CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
         to_char(route_desc) route_desc,
-        CODE_UOM unita_riferimento_pa,
-        DESCRIZIONE_ESTESA_CONTENITORE,
-        DESCRIZIONE_FORMA_FARMACEUTICA
+        CASE WHEN (NVL(CODE_UOM,'')) is NULL then ' ' ELSE TO_CHAR(NVL(CODE_UOM,'')) END unita_riferimento_pa,
+        CASE WHEN (NVL(DESCRIZIONE_ESTESA_CONTENITORE,'')) is NULL then ' ' ELSE TO_CHAR(NVL(DESCRIZIONE_ESTESA_CONTENITORE,'')) END DESCRIZIONE_ESTESA_CONTENITORE,
+        CASE WHEN (NVL(DESCRIZIONE_FORMA_FARMACEUTICA,'')) is NULL then ' ' ELSE TO_CHAR(NVL(DESCRIZIONE_FORMA_FARMACEUTICA,'')) END DESCRIZIONE_FORMA_FARMACEUTICA
       FROM
       v_somm_paz_nos_v2 v left join V_FARMACI_CONTENITORI_UOM CFC on v.codice_farmaco_somministrato = cfc.amp_code
       WHERE extension = '`+reparto+`'`,
