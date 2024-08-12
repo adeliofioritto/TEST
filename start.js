@@ -18,6 +18,7 @@ app.use(bodyParser.json());
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')));
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
+app.use('/images', express.static(process.cwd() + '/images'))
 app.use(express.static(__dirname + '/public'));
 app.use(cors())
 
@@ -202,8 +203,6 @@ async function generaReportTerapia(reparto,res) {
   let connection;
     try {
       connection = await oracledb.getConnection({ user: DB_USER, password: DB_PASSWORD, connectionString: DB_CONNECTION_STRING });
-      //http://report4c-devade.apps.ccedr.gsd.local/encounter/?encounterCode=23DEG000009%40030122%2FPSD_PSD&idUser=p4cdoctor&unitCode=PSD_PSD_071
-      //http://localhost:3000/encounter/?encounterCode=23DEG000009%40030122%2FPSD_PSD&idUser=p4cdoctor&unitCode=PSD_PSD_071
       /*
       SELECT to_char(extension) extension,
                   to_char(item_code) item_code,
@@ -424,10 +423,29 @@ async function generaReportReparto(dati,res) {
       //http://report4c-devade.apps.ccedr.gsd.local/encounter/?encounterCode=23DEG000009%40030122%2FPSD_PSD&idUser=p4cdoctor&unitCode=PSD_PSD_071
       //http://localhost:3000/encounter/?encounterCode=23DEG000009%40030122%2FPSD_PSD&idUser=p4cdoctor&unitCode=PSD_PSD_071
       
+      result7 = await connection.execute(
+        `select CASE WHEN oo.class_code = 'SRV' THEN 'codice_reparto_giuridico' WHEN oo.class_code = 'HOUS' THEN 'codice_reparto_assistenziale' ELSE null END tipologia_reparto 
+      from CIS4C_DM.org_id oi join cis4c_dm.org_organization oo on oo.id = oi.owner_id_org and oi.concept_id_orgcnpt = 40000
+      where oi.extension = 'OSR_OSR_00210050'`,
+        [],
+        { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
+
+      const rs7 = result7.resultSet;
+      let row7;
+      let tipologiaReparto = '';
+
+        while ((row7 = await rs7.getRow())) {
+          tipologiaReparto = row7.TIPOLOGIA_REPARTO
+          console.log(tipologiaReparto);  
+          }
+
 
        if (dati.funzione === 'pazienti'){
+        //console.log("1:"+new Date().toString());
 
-        result = await connection.execute(
+        
+
+        /*result = await connection.execute(
           `SELECT
           to_char(struttura) struttura,
           CASE WHEN (NVL(codice_reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(codice_reparto_assistenziale,'')) END codice_reparto_assistenziale,
@@ -456,8 +474,41 @@ async function generaReportReparto(dati,res) {
           V_SOMM_PAZ_WARD WHERE data_inizio_somministrazione_pianificata between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+`','DD/MM/YYYY') + (86399/86400) and (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')`,
           [],
           { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
+          console.log("2:"+new Date().toString());*/
 
-  
+          /* 2024/08/09 AF ottimizzazione query, aggiunto filtro dinamico sulla tipologia di reparto ass/giu, abbattimento costo da 11069 a 1381 */
+          result = await connection.execute(
+            `SELECT
+            to_char(struttura) struttura,
+            CASE WHEN (NVL(codice_reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(codice_reparto_assistenziale,'')) END codice_reparto_assistenziale,
+            CASE WHEN (NVL(reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(reparto_assistenziale,'')) END reparto_assistenziale,
+            to_char(codice_reparto_giuridico) codice_reparto_giuridico,
+            to_char(reparto_giuridico) reparto_giuridico,
+            to_char(id_people) id_people,
+            to_char(EXTENSION) EXTENSION,
+            to_char(data_inizio_prescrizione) data_inizio_prescrizione,
+            CASE WHEN (NVL(data_fine_prescrizione,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_fine_prescrizione,'')) END data_fine_prescrizione,
+            to_char(codice_farmaco_prescritto) codice_farmaco_prescritto,
+            to_char(descrizione_farmacto_prescritto) descrizione_farmacto_prescritto,
+            sostituibilita,
+            CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,
+            CASE WHEN (NVL(codice_farmaco_somministrato,'')) is NULL then ' ' ELSE TO_CHAR(NVL(codice_farmaco_somministrato,'')) END codice_farmaco_somministrato,
+            CASE WHEN (NVL(descrizione_farmacto_somministrato,'')) is NULL then ' ' ELSE TO_CHAR(NVL(descrizione_farmacto_somministrato,'')) END descrizione_farmacto_somministrato,
+            CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
+            CASE WHEN (NVL(quantita,'')) is NULL then ' ' ELSE TO_CHAR(NVL(quantita,'')) END quantita,
+            CASE WHEN (NVL((qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL((qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata,
+            to_char(stato) stato,
+            to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
+            CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
+            to_char(route_desc) route_desc,
+            decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale,codice_reparto_giuridico),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario
+        FROM
+            V_SOMM_PAZ_WARD WHERE data_inizio_somministrazione_pianificata between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+`','DD/MM/YYYY') + (86399/86400) and (`+tipologiaReparto+` = '`+dati.unitCode+`')`,
+            [],
+            { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
+            //console.log("2:"+new Date().toString());
+
+
       const rs = result.resultSet;
       let row;
       let riga = 1;
@@ -490,6 +541,7 @@ async function generaReportReparto(dati,res) {
 
       riga++;
 
+      //console.log("3:"+new Date().toString());
 
       while ((row = await rs.getRow())) {
         //console.log(riga);  
@@ -522,7 +574,8 @@ async function generaReportReparto(dati,res) {
         worksheetPAZ.cell(riga,25).string(row.IN_PRONTUARIO).style(stylePAZ);
         riga++;
       }
-  
+      //console.log("4:"+new Date().toString());
+
         //workbook.write('statistiche.xlsx', res);
         workbookPAZ.write(dati.funzione+" "+dati.unitCode+" "+ date + "-" + month + "-" + year+" ore " + hour+"-" + minutes+".xlsx", res);
         await rs.close();
@@ -536,7 +589,7 @@ async function generaReportReparto(dati,res) {
         console.log("dati.timeFinale:"+dati.timeFinale);
         var worksheetPAZbisogno = workbookPAZ.addWorksheet('AL_BISOGNO');
 
-        result2 = await connection.execute(
+        /*result2 = await connection.execute(
           `select t.*, decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario from (
             WITH appoggio as (
             select * from v_somm_presc_ward
@@ -558,7 +611,30 @@ async function generaReportReparto(dati,res) {
             order by descrizione_farmacto_prescritto) t`,
           [],
           { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
+          */
 
+          result2 = await connection.execute(
+            `select t.*, decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario from (
+              WITH appoggio as (
+              select * from v_somm_presc_ward
+              ) 
+              select 
+                struttura,
+                CASE WHEN (NVL(codice_reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(codice_reparto_assistenziale,'')) END codice_reparto_assistenziale,
+                CASE WHEN (NVL(reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(reparto_assistenziale,'')) END reparto_assistenziale,
+                codice_farmaco_prescritto,
+                descrizione_farmacto_prescritto,
+                sostituibilita,
+                CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
+                CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,                
+                atc_code, 
+                CASE WHEN (NVL(sum(qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL(sum(qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata
+                from appoggio 
+              where nome_stanza in (`+dati.listaLetti+`) and appoggio.planned_start between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+` `+dati.timeFinale+`','DD/MM/YYYY HH24:MI') and (`+tipologiaReparto+` = '`+dati.unitCode+`')
+              group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_farmaco_prescritto,descrizione_farmacto_prescritto,sostituibilita,unita_di_misura,forma_farmaceutica_prescritta,atc_code 
+              order by descrizione_farmacto_prescritto) t`,
+            [],
+            { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
 
         const rs2 = result2.resultSet;
         let row2;
@@ -678,6 +754,7 @@ async function generaReportReparto(dati,res) {
       if (dati.funzione === 'farmacia'){
         var worksheetPAZbisogno = workbookPAZ.addWorksheet('AL_BISOGNO');
     
+        /*
           result3 = await connection.execute(
             `select t.*, decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale,codice_reparto_giuridico),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario from (
               WITH appoggio as (
@@ -702,6 +779,32 @@ async function generaReportReparto(dati,res) {
               order by descrizione_farmacto_prescritto) t`,
             [],
             { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
+            */
+           
+            result3 = await connection.execute(
+              `select t.*, decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale,codice_reparto_giuridico),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario from (
+                WITH appoggio as (
+                select * from v_somm_presc_ward
+                ) 
+                select 
+                  struttura,
+                  CASE WHEN (NVL(codice_reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(codice_reparto_assistenziale,'')) END codice_reparto_assistenziale,
+                  CASE WHEN (NVL(reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(reparto_assistenziale,'')) END reparto_assistenziale,
+                  codice_reparto_giuridico,
+                  reparto_giuridico,
+                  codice_farmaco_prescritto,
+                  sostituibilita,
+                  descrizione_farmacto_prescritto,
+                  CASE WHEN (NVL(unita_di_misura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(unita_di_misura,'')) END unita_di_misura,
+                  CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,                
+                  atc_code, 
+                  CASE WHEN (NVL(sum(qty_arr),'')) is NULL then ' ' ELSE rtrim(to_char(NVL(sum(qty_arr),'') , 'FM999999999999990.99'), '.') END qty_arrotondata
+                  from appoggio 
+                where appoggio.planned_start between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+`','DD/MM/YYYY') + (86399/86400) and (`+tipologiaReparto+` = '`+dati.unitCode+`')
+                group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_reparto_giuridico,reparto_giuridico,codice_farmaco_prescritto,descrizione_farmacto_prescritto,sostituibilita,unita_di_misura,forma_farmaceutica_prescritta,atc_code
+                order by descrizione_farmacto_prescritto) t`,
+              [],
+              { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
 
   
       const rs3 = result3.resultSet;
