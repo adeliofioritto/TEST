@@ -47,12 +47,40 @@
             background: lightgray;
             margin: 5px;
         }
+        .opacizza{
+            opacity: 0.5;            
+            user-select: none;
+            pointer-events: none;
+        }
+        #spinner{
+            background-image: url(/images/spinnertrasparent.gif);
+            background-size: 250px auto;
+            background-repeat: no-repeat;
+            background-position: center;
+            float: left;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            visibility: hidden;            
+        }
+        .loadingText{
+            margin-top: -60px;
+            top: 50%;
+            position: absolute;
+            text-align: center;
+            width: 100%;
+        }
     </style>
 </head>
 <script>
     var csvListaLetti;
 
+     
+ 
+
         $(document).ready(function () {
+
         var listaRepartiSelezionati=[];
 
         /* CARRELLO */
@@ -164,7 +192,7 @@
                 var limit = $(this).datepicker('getDate');
 
                 date.setDate(date.getDate() + 0); // The End date must be 0 days after the start date
-                limit.setDate(limit.getDate() + 6); // The End date can only be maximum 6 days from today
+                limit.setDate(limit.getDate() + 14); // The End date can only be maximum 6 days from today
                 oggi = new Date();
 
                 $("#suspendDatePicker").datepicker("option", "minDate", date);
@@ -300,7 +328,44 @@
     listaLetti = listaLetti.split(',');
     console.log(listaLetti);
 
+    function chiamataAsincrona(date_suspstartDatePicker,date_suspendDatePicker,time_suspendDatePicker,funzionePassata,csvListaLetti){
+        $( "#blockScreen" ).addClass('opacizza');
+        $("#spinner").css("visibility", "visible");
+            let ts = Date.now();
+            let date_ob = new Date(ts);
+            let date = date_ob.getDate();
+            let month = date_ob.getMonth() + 1;
+            let year = date_ob.getFullYear();  
+            let hour = date_ob.getHours();
+            let minutes = date_ob.getMinutes();
+            $.ajax({
+                url: '/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&timeFinale='+time_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>&listaLetti='+csvListaLetti,
+                method: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (data) {
+                    console.log(data);
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = funzionePassata+" <%= unitCode %> "+ date + "-" + month + "-" + year+" ore " + hour+"-" + minutes+".xlsx";
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                    $( "#blockScreen" ).removeClass('opacizza');
+                    $("#spinner").css("visibility", "hidden");
 
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                  alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                  $( "#blockScreen" ).removeClass('opacizza');
+                  $("#spinner").css("visibility", "hidden");
+                }
+
+            });
+    }
     //carrello,farmacia,pazienti
     function generaReportSomministrazione(funzionePassata){
 
@@ -320,8 +385,10 @@
             var time_suspendDatePicker = $('#end-time').val();
             console.log(time_suspendDatePicker);
             console.log(csvListaLetti);
-            location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&timeFinale='+time_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>&listaLetti='+csvListaLetti);
-            
+           
+            //location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&timeFinale='+time_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>&listaLetti='+csvListaLetti);
+            //workbookPAZ.write(dati.funzione+" "+dati.unitCode+" "+ date + "-" + month + "-" + year+" ore " + hour+"-" + minutes+".xlsx", res);
+            chiamataAsincrona(date_suspstartDatePicker,date_suspendDatePicker,time_suspendDatePicker,funzionePassata,csvListaLetti);
         }
 
         
@@ -338,7 +405,9 @@
             console.log(date_suspstartDatePicker);
             var date_suspendDatePicker = $('#suspendDatePickerApp').datepicker({ dateFormat: 'yy-mm-dd' }).val();
             console.log(date_suspendDatePicker);
-            location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>&listaLetti='+csvListaLetti);
+            //location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>&listaLetti='+csvListaLetti);
+            chiamataAsincrona(date_suspstartDatePicker,date_suspendDatePicker,null,funzionePassata,csvListaLetti);
+
             
         }
 
@@ -356,8 +425,9 @@
             console.log(date_suspstartDatePicker);
             var date_suspendDatePicker = $('#suspendDatePicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
             console.log(date_suspendDatePicker);
-            location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>&listaLetti='+csvListaLetti);
-            
+            //location.replace('/wardreport/?dataIniziale='+date_suspstartDatePicker+'&dataFinale='+date_suspendDatePicker+'&funzione='+funzionePassata+'&idUser=<%= idUser %>&unitCode=<%= unitCode %>&listaLetti='+csvListaLetti);
+            chiamataAsincrona(date_suspstartDatePicker,date_suspendDatePicker,null,funzionePassata,csvListaLetti);
+
         }
 
 
@@ -369,7 +439,7 @@
 </script>
 
 <body>
-
+    <div id="blockScreen">
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>Attenzione!</strong> Le seguenti estrazioni potrebbero richiedere alcuni minuti.
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -450,7 +520,10 @@
           </div>
         </div>
       </div>
-
+    </div>
+    <div id="spinner">
+        <!--<p class="loadingText">Generazione report in corso...</p>-->
+    </div>
     </body>
 
 </html>
