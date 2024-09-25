@@ -501,9 +501,13 @@ async function generaReportReparto(dati,res) {
             to_char(data_inizio_somministrazione_pianificata) data_inizio_somministrazione_pianificata,
             CASE WHEN (NVL(data_inizio_somministrazione_efettuata,'')) is NULL then ' ' ELSE TO_CHAR(NVL(data_inizio_somministrazione_efettuata,'')) END data_inizio_somministrazione_efettuata,
             to_char(route_desc) route_desc,
-            decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale,codice_reparto_giuridico),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario
+            decode(farmacoinprontuario(codice_farmaco_prescritto,codice_reparto_assistenziale,codice_reparto_giuridico),1,'In prontuario', 0, 'Fuori Prontuario', -1, 'Errore') in_prontuario,
+            CASE WHEN (NVL(sum_num_strength_val,'')) is NULL then ' ' ELSE TO_CHAR(NVL(sum_num_strength_val,'')) END tot_pa,
+            CASE WHEN (NVL(CODE_UOM,'')) is NULL then ' ' ELSE TO_CHAR(NVL(CODE_UOM,'')) END unita_riferimento_pa,
+            CASE WHEN (NVL(DESCRIZIONE_ESTESA_CONTENITORE,'')) is NULL then ' ' ELSE TO_CHAR(NVL(DESCRIZIONE_ESTESA_CONTENITORE,'')) END DESCRIZIONE_ESTESA_CONTENITORE,
+            CASE WHEN (NVL(DESCRIZIONE_FORMA_FARMACEUTICA,'')) is NULL then ' ' ELSE TO_CHAR(NVL(DESCRIZIONE_FORMA_FARMACEUTICA,'')) END DESCRIZIONE_FORMA_FARMACEUTICA
         FROM
-            V_SOMM_PAZ_WARD WHERE data_inizio_somministrazione_pianificata between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+`','DD/MM/YYYY') + (86399/86400) and (`+tipologiaReparto+` = '`+dati.unitCode+`')`,
+            V_SOMM_PAZ_WARD v left join V_FARMACI_CONTENITORI_UOM CFC on v.codice_farmaco_somministrato = cfc.amp_code WHERE data_inizio_somministrazione_pianificata between to_date('`+dati.dataIniziale+`','DD/MM/YYYY') and to_date('`+dati.dataFinale+`','DD/MM/YYYY') + (86399/86400) and (`+tipologiaReparto+` = '`+dati.unitCode+`')`,
             [],
             { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
             //console.log("2:"+new Date().toString());
@@ -521,7 +525,7 @@ async function generaReportReparto(dati,res) {
       worksheetPAZ.cell(riga,6).string('CODICE_REPARTO_GIURIDICO').style(stylePAZ);
       worksheetPAZ.cell(riga,7).string('REPARTO_GIURIDICO').style(stylePAZ);
       worksheetPAZ.cell(riga,8).string('ID_PEOPLE').style(stylePAZ);
-      worksheetPAZ.cell(riga,9).string('EXTENSION').style(stylePAZ);
+      worksheetPAZ.cell(riga,9).string('NOSOLOGICO').style(stylePAZ);
       worksheetPAZ.cell(riga,10).string('DATA_INIZIO_PRESCRIZIONE').style(stylePAZ);
       worksheetPAZ.cell(riga,11).string('DATA_FINE_PRESCRIZIONE').style(stylePAZ);
       worksheetPAZ.cell(riga,12).string('CODICE_FARMACO_PRESCRITTO').style(stylePAZ);
