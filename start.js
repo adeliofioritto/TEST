@@ -479,6 +479,7 @@ async function generaReportReparto(dati,res) {
           /* 2024/08/09 AF ottimizzazione query, aggiunto filtro dinamico sulla tipologia di reparto ass/giu, abbattimento costo da 11069 a 1381 */
           result = await connection.execute(
             `SELECT
+            CASE WHEN (NVL(tipo_fornitura,'')) is NULL then ' ' ELSE TO_CHAR(NVL(tipo_fornitura,'')) END tipo_fornitura,
             to_char(struttura) struttura,
             CASE WHEN (NVL(codice_reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(codice_reparto_assistenziale,'')) END codice_reparto_assistenziale,
             CASE WHEN (NVL(reparto_assistenziale,'')) is NULL then ' ' ELSE TO_CHAR(NVL(reparto_assistenziale,'')) END reparto_assistenziale,
@@ -708,7 +709,7 @@ async function generaReportReparto(dati,res) {
                 CASE WHEN (NVL(forma_farmaceutica_prescritta,'')) is NULL then ' ' ELSE TO_CHAR(NVL(forma_farmaceutica_prescritta,'')) END forma_farmaceutica_prescritta,                
                 atc_code 
                 from appoggio 
-              where nome_stanza in (`+dati.listaLetti+`) and (codice_reparto_assistenziale = '`+dati.unitCode+`' OR codice_reparto_giuridico = '`+dati.unitCode+`')
+              where nome_stanza in (`+dati.listaLetti+`) and (`+tipologiaReparto+` = '`+dati.unitCode+`')
               group by struttura,codice_reparto_assistenziale,reparto_assistenziale,codice_farmaco_prescritto,descrizione_farmacto_prescritto,sostituibilita,forma_farmaceutica_prescritta,atc_code
               order by descrizione_farmacto_prescritto) t`,
           [],
