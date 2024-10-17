@@ -543,10 +543,11 @@ async function generaReportReparto(dati,res) {
       worksheetPAZ.cell(riga,23).string('DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA').style(stylePAZ);
       worksheetPAZ.cell(riga,24).string('ROUTE_DESC').style(stylePAZ);
       worksheetPAZ.cell(riga,25).string('IN_PRONTUARIO').style(stylePAZ);
-      worksheetPAZ.cell(riga,26).string('TOT_PA').style(stylePAZ);
-      worksheetPAZ.cell(riga,27).string('UNITA_RIFERIMENTO_PA').style(stylePAZ);
-      worksheetPAZ.cell(riga,28).string('DESCRIZIONE_ESTESA_CONTENITORE').style(stylePAZ);
-      worksheetPAZ.cell(riga,29).string('DESCRIZIONE_FORMA_FARMACEUTICA').style(stylePAZ);
+      worksheetPAZ.cell(riga,26).string('TIPO_FORNITURA').style(stylePAZ);
+      worksheetPAZ.cell(riga,27).string('TOT_PA').style(stylePAZ);
+      worksheetPAZ.cell(riga,28).string('UNITA_RIFERIMENTO_PA').style(stylePAZ);
+      worksheetPAZ.cell(riga,29).string('DESCRIZIONE_ESTESA_CONTENITORE').style(stylePAZ);
+      worksheetPAZ.cell(riga,30).string('DESCRIZIONE_FORMA_FARMACEUTICA').style(stylePAZ);
 
       riga++;
 
@@ -581,10 +582,11 @@ async function generaReportReparto(dati,res) {
         worksheetPAZ.cell(riga,23).string(row.DATA_INIZIO_SOMMINISTRAZIONE_EFETTUATA).style(stylePAZ);
         worksheetPAZ.cell(riga,24).string(row.ROUTE_DESC).style(stylePAZ);
         worksheetPAZ.cell(riga,25).string(row.IN_PRONTUARIO).style(stylePAZ);
-        worksheetPAZ.cell(riga,26).string(row.TOT_PA).style(stylePAZ);
-        worksheetPAZ.cell(riga,27).string(row.UNITA_RIFERIMENTO_PA).style(stylePAZ);
-        worksheetPAZ.cell(riga,28).string(row.DESCRIZIONE_ESTESA_CONTENITORE).style(stylePAZ);
-        worksheetPAZ.cell(riga,29).string(row.DESCRIZIONE_FORMA_FARMACEUTICA).style(stylePAZ);
+        worksheetPAZ.cell(riga,26).string(row.TIPO_FORNITURA).style(stylePAZ);
+        worksheetPAZ.cell(riga,27).string(row.TOT_PA).style(stylePAZ);
+        worksheetPAZ.cell(riga,28).string(row.UNITA_RIFERIMENTO_PA).style(stylePAZ);
+        worksheetPAZ.cell(riga,29).string(row.DESCRIZIONE_ESTESA_CONTENITORE).style(stylePAZ);
+        worksheetPAZ.cell(riga,30).string(row.DESCRIZIONE_FORMA_FARMACEUTICA).style(stylePAZ);
         riga++;
       }
       //console.log("4:"+new Date().toString());
